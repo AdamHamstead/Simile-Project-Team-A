@@ -12,6 +12,8 @@ var numtriples: number = 0;
 var triple: number = [5000][3];
 var context: boolean;
 var relation_labels: string;
+var concepts: string;
+var numconcepts: number = 0;
 
 function repeat_is_not_in_a_cycle(target: number, source: number): boolean{
 	for (let p : number = 0; p < numcpaths; p++){
