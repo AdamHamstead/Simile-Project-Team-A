@@ -384,7 +384,7 @@ void reportInputAndOuputConcepts(){ //Creates and writes to the report.txt file
 	int output_concepts[1000];
 	int numoutputs = 0;*/
 
-	//find input concepts
+	//find input concepts (the start nodes)
 	for(int i=0; i < numconcepts; i++){
 		int j;
 		for(j = 0; j < numtriples; j++){
@@ -395,7 +395,7 @@ void reportInputAndOuputConcepts(){ //Creates and writes to the report.txt file
 		}
 	}
 
-	//find output concepts
+	//find output concepts (the end nodes)
 	for(int i=0; i < numconcepts; i++){
 		int j;
 		for(j = 0; j < numtriples; j++){
