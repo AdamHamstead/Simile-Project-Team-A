@@ -1,41 +1,61 @@
-import * as fs from 'fs';
-let numConcepts : number;
-let numTriples : number;
-const TARGET : number = 2;
-const SOURCE : number = 0;
-
-class triple
+class Concept
 {
-    private SourceConcept: string;
-    private relation: string;
-    private targetConcept: string;
+    private value: string;
+    private relations = new Array<Relation>;
 
-    public constructor(SourceConcept: string, relation: string, targetConcept: string)
+    public constructor(value:string)
     {
-        this.SourceConcept = SourceConcept;
-        this.relation = relation;
-        this.targetConcept = targetConcept;
+        this.value = value;
+    }
+
+    public AddRelation(relation: Relation)
+    {
+        this.relations.push(relation);
     }
     
-}
-var triples = new Array(5000);
-for(let i = 0; i < 5000; i++)
-{
-    var test = new triple("a","b","c");
-    triples.push(test);
-
-}
-
-function reportInputAndOutputConcepts()
-{
-    
-    for(let i = 0; i < numConcepts; i++)
+    public getValue()
     {
-        var j : number = 0;
-        for(j; j < numtriples; j++)
+        return this.value;
+    }
+
+    public searchForTarget(value: string)
+    {
+        this.relations.forEach(element => //loop through all relations 
         {
-        }
+            if(element.getTarget().getValue() == value) //gets the value of the target at that relation
+            {
+                return element.getTarget() //if value matches, returns that target
+            }
+            else
+            {
+                element.getTarget().searchForTarget(value); 
+                //else calls the function on the target
+            }
+        });
     }
 }
 
-reportInputAndOutputConcepts();
+class Relation
+{
+    private value: string;
+    private source: Concept;
+    private target: Concept;
+
+    public constructor(source: Concept, target: Concept, value: string)
+    {
+        this.source = source;
+        this.target = target;
+        this.value = value;
+    }
+    
+    public getValue()
+    {
+        return this.value
+    }
+
+    public getTarget()
+    {
+        return this.target;
+    }
+}
+
