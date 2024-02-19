@@ -10,6 +10,7 @@ function XMLParserEntry(){
 
 
     var nodesByName = document.getElementsByTagName('value');
+    
 
 
 }
