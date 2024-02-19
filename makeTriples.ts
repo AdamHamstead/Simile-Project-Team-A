@@ -1,8 +1,5 @@
-let numconcepts: number;
 let referents: number;
-let numtriples: number;
 
-let triple: { SourceConcept: number; Relation: number; TargetConcept: number; }[]
 
 function makeTriples(rel: number, ref_list: string): void {
 
