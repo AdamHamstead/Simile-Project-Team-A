@@ -123,7 +123,7 @@ void main(){
 	report_file.close();
 }
 
-void input_csv_file(string fname){ 
+void input_csv_file(string fname){  //done by sinead
 	int find_concept(string);
 	int find_relation(string);
 
@@ -223,7 +223,7 @@ void input_csv_file(string fname){
 		while ( !_kbhit());*/
 }
 
-int find_concept(string concept){
+int find_concept(string concept){  //doing by daniel
 	int pos = -1;
 	for(int i = 0; i < numconcepts; i++){
 		if(concept == concepts[i]){
@@ -234,7 +234,7 @@ int find_concept(string concept){
 	return(pos);
 }
 
-int find_relation(string relation){
+int find_relation(string relation){ //doing by daniel
 	int pos = -1;
 	for(int i = 0; i < number_of_relations; i++){
 		if(relation == relation_labels[i]){
@@ -329,7 +329,7 @@ void input_cgif_file(string fname){ //Need to rewrite this for xml files
 }
 
 
-void makeTriples(int rel, string ref_list){
+void makeTriples(int rel, string ref_list){ //DONE
 	int i=0; //index for ref_list (pointer to each char in the string)
 
 	string referent=""; //reset CG Concept referent
@@ -378,7 +378,7 @@ void makeTriples(int rel, string ref_list){
 	}
 }
 
-void reportInputAndOuputConcepts(){ //Creates and writes to the report.txt file 
+void reportInputAndOuputConcepts(){ //Creates and writes to the report.txt file //DONE
 	/*int input_concepts[1000];
 	int numinputs = 0;
 	int output_concepts[1000];
@@ -517,7 +517,7 @@ void extractCGconceptTypeLabelandReferent(string type_and_referent){ //only call
 		}
 }
 
-int searchforreferent(string referent)
+int searchforreferent(string referent) //DONE
 {
 	int pos;
 	for(pos = 0; pos<numconcepts; pos++)
@@ -527,7 +527,7 @@ int searchforreferent(string referent)
 	return pos;
 }
 
-void triples_to_binaries(){
+void triples_to_binaries(){ //DONE
 	void add_binary(int, int, int, int, int[][2], int);
 
 	int path[100000][2]; //to record each transitive path through triples
@@ -556,7 +556,7 @@ void triples_to_binaries(){
 }
 
 
-void add_binary(int attribute, int source, int relation, int target, int path[][2], int pathsize) {
+void add_binary(int attribute, int source, int relation, int target, int path[][2], int pathsize) { //DONE
 
 	bool is_new_cycle(int[][2], int);
 	bool repeat_is_not_in_a_cycle(int, int);
@@ -658,7 +658,7 @@ void add_binary(int attribute, int source, int relation, int target, int path[][
 //	return false;
 //}
 
-int target_already_in_pathway(int target, int path[][2], int pathsize){
+int target_already_in_pathway(int target, int path[][2], int pathsize){ //DONE
 	int count = 0;
 	for(int p=0; p<pathsize; p++){
 		if(target==path[p][0]) count++;
@@ -666,21 +666,21 @@ int target_already_in_pathway(int target, int path[][2], int pathsize){
 	return count;
 }
 
-bool is_output(int target){
+bool is_output(int target){ //DONE
 	for(int i=0; i<numoutputs; i++){
 		if(target == output_concepts[i]) return true;
 	}
 	return false;
 }
 
-bool is_input(int attribute){
+bool is_input(int attribute){ //DONE
 	for(int i=0; i<numinputs; i++){
 		if(triple[attribute][SOURCE] == input_concepts[i]) return true;
 	}
 	return false;
 }
 
-void add_to_repeats(int target, int attribute){
+void add_to_repeats(int target, int attribute){ //DONE
 	int i;
 	for(i = 0; i < numreps; i++){
 		if(attribute == repeats[i][ATTRIBUTE] && target == repeats[i][OBJECT]){
@@ -697,7 +697,7 @@ void add_to_repeats(int target, int attribute){
 
 }
 
-bool repeat_is_not_in_a_cycle(int target, int source){
+bool repeat_is_not_in_a_cycle(int target, int source){ //DONE
 	for(int p=0; p<numcpaths; p++){
 		for(int i = 0; i < cpathsizes[p]; i++){
 			if(target == cyclepaths[p][i]){
@@ -710,7 +710,7 @@ bool repeat_is_not_in_a_cycle(int target, int source){
 	return true;
 }
 
-bool is_new_cycle(int path[][2], int pathsize){
+bool is_new_cycle(int path[][2], int pathsize){ //DONE
 	for(int p=0; p<numcpaths; p++){
 		if(pathsize == cpathsizes[p]){
 			int found = 0;
@@ -751,7 +751,7 @@ bool is_new_cycle(int path[][2], int pathsize){
 //}
 
 
-void output_cxt_file() {  //Just makes cxt file dont need to change much exept global variables
+void output_cxt_file() {  //Just makes cxt file dont need to change much exept global variables //DONE
 	int pos = fname.find(".");
 	cfname = fname.substr(0,pos);
 	cfname+=".cxt";
