@@ -7,13 +7,14 @@ function XMLParserEntry(){
     var callback;
     let source = "C:\Users\adamh\OneDrive\Documents\GitHub\Simile-Project-Team-A\XMLExamples\CatOnMat.xml"
     let data = ReadXML(source);
+    let IDs;
     //find rootnode 
     data.forEach(element => {
-        
+        IDs.push(element.slice(element.indexof('"'), element.indexof('"',element.indexof('"')+2))); 
     });
 }
 
-async function ReadXML(source: any){
+function ReadXML(source: any){
     let usefulData :any[]= [];
     fetch(source)
         .then((res) => res.text())
