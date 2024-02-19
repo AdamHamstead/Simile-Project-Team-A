@@ -1,16 +1,17 @@
-let fname:string;
-let cpathsizes : number[] = [10000];
+import * as gb from './GlobalVariables'
 
 import * as fs from 'fs'
 import * as triplesBinaries from "./triples_to_binaries+add_binaries"
-import * as cxt from "./Line700-778" 
-import * as concepts from "././reportInputAndOutputConcepts"
+import * as cxt from "./Output_cxt_file" 
+import * as concepts from "./reportInputAndOutputConcepts"
+
+let fname:string;
 
 main();
 function main(){
 
 	for(let p:number = 0; p < 100; p++) {
-        cpathsizes[p]=0; 
+        gb.cpathsizes[p]=0; 
     }
 	//cin >> fname;
 	console.log("\n\nEnter cgif or delimiter separated triples file name including extension: ");
