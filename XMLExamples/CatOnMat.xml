@@ -5,7 +5,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="Xv54g7K8RwvLWJeZpyLM-1" value="Cat: Bumbles" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" parent="0" vertex="1">
+        <mxCell id="Xv54g7K8RwvLWJeZpyLM-1" value="Cat: Bumbles" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
           <mxGeometry x="-485" y="-211" width="120" height="60" as="geometry" />
         </mxCell> <!-- root cat bumbles-->
         <mxCell id="Xv54g7K8RwvLWJeZpyLM-2" value="" style="endArrow=classic;html=1;rounded=0;fontSize=12;curved=1;startSize=8;endSize=8;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="Xv54g7K8RwvLWJeZpyLM-1" target="Xv54g7K8RwvLWJeZpyLM-4" edge="1">
@@ -14,7 +14,7 @@
             <mxPoint x="-507" y="-102" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Xv54g7K8RwvLWJeZpyLM-3" value="Mat: Gwyn&#39;s" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+        <mxCell id="Xv54g7K8RwvLWJeZpyLM-3" value="Mat: Gwyn&#39;s" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;" parent="0" vertex="1">
           <mxGeometry x="-485" y="2" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="Xv54g7K8RwvLWJeZpyLM-4" value="sits-on" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
