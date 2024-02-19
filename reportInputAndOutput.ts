@@ -57,5 +57,10 @@ class Relation
     {
         return this.target;
     }
+
+    public getSource()
+    {
+        return this.source
+    }
 }
 
