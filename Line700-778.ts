@@ -5,11 +5,11 @@ var fs = require('fs');
 var fname : string;			
 var rfname : string;			
 var cfname : string;	
-var cyclepaths : number = [10000][10000]; //to record each cycle path
+var cyclepaths : number[][] = [[10000],[10000]]; //to record each cycle path
 var cpathsizes : number[] = [10000];
 var numcpaths : number = 0;
 var numtriples: number = 0;
-var triple: number = [5000][3];
+var triple: number[][] = [[5000],[3]];
 var context: boolean;
 var relation_labels: string;
 var concepts: string;
