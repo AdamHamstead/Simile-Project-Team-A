@@ -1,20 +1,22 @@
 
-var require: any 
-var fs = require('fs');
-
-var fname : string;			
-var rfname : string;			
-var cfname : string;	
 var cyclepaths : number = [10000][10000]; //to record each cycle path
-var cpathsizes : number[] = [10000];
 var numcpaths : number = 0;
 var numtriples: number = 0;
-var triple: number = [5000][3];
-var context: boolean;
+var triple: number[][] = [[5000],[3]];
+let context: boolean[][];
 var relation_labels: string;
 var concepts: string;
 var numconcepts: number = 0;
 
+
+let SOURCE = 0		//source concept index of triple - in object
+let RELATION = 1		//relation index of triple - in object
+
+
+import * as fs from 'fs'
+
+
+/*
 function repeat_is_not_in_a_cycle(target: number, source: number): boolean{
 	for (let p : number = 0; p < numcpaths; p++){
 		for(let i : number = 0; i < cpathsizes[p]; i++){
@@ -47,35 +49,27 @@ function is_new_cycle(path,[],[]: number[][], pathsize: number): boolean{
 	}
 	return true;
 }
-
-function output_cxt_file(): void {  //Just makes cxt file dont need to change much exept global variables
-	let pos: number = fname.search(".");
-	cfname = fname.substr(0,pos);
-	cfname += ".cxt";
-	let outcxt: any = fs.readFile(cfname);
-	let content = outcxt + "B\n\n";
-	content += numconcepts + "\n";
-	content += numtriples + "\n\n";
-	for(let i: number = 0; i < numtriples; i++){
-		content += concepts[i] + "\n";
+*/
+export function output_cxt_file(fname:string): void {  //Just makes cxt file dont need to change much exept global variables
+	let pos: number = fname.indexOf(".");
+	let cfname:string = fname.substring(0,pos) + ".cxt";
+	fs.writeFileSync(cfname, "B\n\n");
+	fs.writeFileSync(cfname, numconcepts + "\n");
+	fs.writeFileSync(cfname, numtriples + "\n\n");
+	for(let i: number = 0; i < numconcepts; i++){
+		fs.writeFileSync(cfname, concepts[i] + "\n");
 	}
 	for(let j: number = 0; j < numtriples; j++){
-		content += concepts[triple[j][SOURCE]] + " " + relation_labels[triple[j][RELATION]] + "\n";
+		fs.writeFileSync(cfname, concepts[triple[j][SOURCE]] + " " + relation_labels[triple[j][RELATION]] + "\n");
 	}
 	for(let i: number = 0; i < numconcepts; i++){
 		for(let j: number = 0; j < numtriples; j++){
 			if(context[i][j]){
-				content += "X";
+				fs.writeFileSync(cfname, "X");
 			}
 			else {
-				content += ".";
+				fs.writeFileSync(cfname, "\n");
 			}
 		}
-		content += "\n";
 	}
-	fs.writeFile(cfname, content, function (err) {
-		if (err) throw err;
-		console.log('Saved!');
-	});
-	fs.close();
 }

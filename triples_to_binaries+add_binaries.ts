@@ -1,10 +1,13 @@
+import * as Line661 from "./Line661-732"
+
+
 let RELATION = 1;		//relation index of triple
 let TARGET = 2;		//target concept index of triple
 let ATTRIBUTE = 0;
 let TIMES = 0;
 let OBJECT = 0;
 let SOURCE = 0;
-let numReps = 2;
+let numReps = 0;
 let repeats: number[][] = [];
 let cyclepaths: number[][] = [];
 let cpathsizes: number[] = [];
@@ -24,13 +27,14 @@ let MAX_COLS = 1000;
 let context: boolean[][];
 let concepts: string[];	//FCA formal object name = GC Target Concept
 
-
+import * as f from "./Line661-732"
 import * as fs from 'fs'; //File reading and writing
 
-let fname:string = "Triples to Binaries Report for InputFile.txt"
+let fname:string = ""
 
-//triples_to_binaries();
-function triples_to_binaries(){
+
+
+export function triples_to_binaries(){
     let path:number[][] = []; //to record each transitive path through triples
     let pathSize:number = 0;
 
@@ -63,9 +67,9 @@ function add_binary(attribute:number, source:number, relation:number, target:num
 
     //repeated output targets
     if(context[target][attribute] == true){
-        if(repeat_is_not_in_a_cycle(target, triple[attribute][SOURCE])){
-            if(is_output(target) && is_input(attribute)){
-                add_to_repeats(target, attribute);
+        if(f.repeat_is_not_in_a_cycle(target, triple[attribute][SOURCE])){
+            if(f.is_output(target) && f.is_input(attribute)){
+                f.add_to_repeats(target, attribute);
             }
         }
     }
@@ -74,9 +78,9 @@ function add_binary(attribute:number, source:number, relation:number, target:num
         context[target][attribute] = true;
 
         //if object is an output and attribute involves an input then report pathway
-        if(is_output(target) && is_input(attribute)){
+        if(f.is_output(target) && f.is_input(attribute)){
             console.log("\n\nDirect Pathway: ");
-            fs.writeFileSync(fname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
+            fs.writeFileSync(fname, "\n\nDirect Pathway: ");
             for (let p = 0; p < pathSize; p++){
                 console.log(concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
                 fs.writeFileSync(fname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
@@ -86,7 +90,7 @@ function add_binary(attribute:number, source:number, relation:number, target:num
         }
 
         if (triple[attribute][SOURCE] == target){ //if source is its own target, its a cycle!
-            if (is_new_cycle(path, pathSize)){
+            if (f.is_new_cycle(path, pathSize)){
                 cpathsizes[numcpaths] = pathSize;
                 console.log("\n\nCycle: ");
                 fs.writeFileSync(fname, "\n\nCycle: ");
@@ -101,7 +105,7 @@ function add_binary(attribute:number, source:number, relation:number, target:num
             }
         }
 
-        if(!target_already_in_pathway(target, path, pathSize)){
+        if(!f.target_already_in_pathway(target, path, pathSize)){
             for (let k = 0; k<numtriples; k++) {
                 if(target == triple[k][SOURCE]){
                     add_binary(attribute, triple[k][SOURCE], triple[k][RELATION], triple[k][TARGET], path, pathSize);

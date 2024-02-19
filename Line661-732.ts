@@ -17,7 +17,7 @@ let triple: number[][] = [];
 
 
 
-function target_already_in_pathway(target: number, path:number[][] ,pathSize: number){
+export function target_already_in_pathway(target: number, path:number[][] ,pathSize: number){
     var count = 0;
     for (let p = 0; p<pathSize; p++){
         if(target==path[p][0]) count++;
@@ -25,14 +25,14 @@ function target_already_in_pathway(target: number, path:number[][] ,pathSize: nu
     return count;
 }
 
-function is_output(target:number){
+export function is_output(target:number){
     for (let i = 0; i <numOutput; i++){
         if(target == output_concepts[i]) return true;
     }
     return false;
 }
 
-function is_input(attribute:number){
+export function is_input(attribute:number){
     for(let i = 0; i < numInputs; i++){
 		if(triple[attribute][SOURCE] == input_concepts[i]) return true;
 	}
@@ -40,7 +40,7 @@ function is_input(attribute:number){
 
 }
 
-function add_to_repeats(target: number, attribute: number){
+export function add_to_repeats(target: number, attribute: number){
 	var i:number = 0;
 	for(let i = 0; i < numReps; i++){
 		if(attribute == repeats[i][ATTRIBUTE] && target == repeats[i][OBJECT]){
@@ -56,7 +56,7 @@ function add_to_repeats(target: number, attribute: number){
 	}
 }
 
-function repeat_is_not_in_a_cycle(target:number, source:number){
+export function repeat_is_not_in_a_cycle(target:number, source:number){
 	for(let p = 0; p < numcpaths; p++){
 		for(let i = 0; i < cpathSizes[p]; i++){
 			if(target == cyclePaths[p][i]){
@@ -69,7 +69,7 @@ function repeat_is_not_in_a_cycle(target:number, source:number){
 	return true;
 }
 
-function is_new_cycle(path:number[][], pathsize:number){
+export function is_new_cycle(path:number[][], pathsize:number){
 	for(let p=0; p<numcpaths; p++){
 		if(pathsize == cpathSizes[p]){
 			var found = 0;
