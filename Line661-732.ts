@@ -6,14 +6,12 @@ let SOURCE = 0;
 let numOutput = 0;
 let numInputs = 0;
 let numReps = 0;
-let numcpaths = 0; 
 let output_concepts: number[] = [];
 let repeats: number[][] = [];
 let cyclePaths: number[][] = [];
 let cpathSizes: number[] = [];
 
 let input_concepts: number[] = [];
-let triple: number[][] = [];
 
 
 

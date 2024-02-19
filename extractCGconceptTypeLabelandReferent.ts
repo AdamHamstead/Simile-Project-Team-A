@@ -1,6 +1,3 @@
-let numconcepts=0;
-let referents;	//CG Concept labels in cgif file
-let concepts;	//FCA formal object name = GC Target Concept
 
 function extractCGconceptTypeLabelandReferent(type_and_referent){
 
