@@ -1,3 +1,5 @@
+// ONLY USED FOR CGIF - NOT NEEDED //
+/*
 let fname
 import * as fs from 'fs'
 const readline = require('readline');
@@ -18,3 +20,4 @@ async function input_cgif_file(fname){
     
   }
 }
+*/

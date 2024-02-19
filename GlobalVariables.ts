@@ -17,6 +17,7 @@ export let cyclePaths: number[][] = Array.from(Array(10000), () => new Array(100
 
 //let cpathsizes: number[] = [];
 export let numcpaths:number = 0; 
+export let referents:string[];
 
 export function setnumcpaths(value:number){
     numcpaths = value;
