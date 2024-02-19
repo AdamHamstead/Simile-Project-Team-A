@@ -1,19 +1,17 @@
+import * as gb from './GlobalVariables'
 
-import fs from 'fs'
+import * as conceptRelation from './FindConceptFindRelation'
+
+import * as fs from 'fs'
 import * as readline from 'readline'
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
-let concepts: string[]
-let number_of_relations: number
-let relation_labels: string[]
 
 
-function input_csv_file(fname: string) {
-    let find_concept: string
-    let find_relation: string
+export function input_csv_file(fname: string) {
 
     if (!fs.existsSync(fname)) {
         console.log("File does not exist!")
@@ -29,8 +27,9 @@ function input_csv_file(fname: string) {
     let escaped: boolean
 
     let delim = "" // delimiter
-    
-    let input  = prompt("\nEnter delimiter character (enter t if delimiter is the tab character, enter s if delimiter is the space character):")
+    delim = ",";
+    var input = "," //TEMP
+    //let input  = prompt("\nEnter delimiter character (enter t if delimiter is the tab character, enter s if delimiter is the space character):")
 
     if (input == 't') 
         delim = '\t'
@@ -70,28 +69,34 @@ function input_csv_file(fname: string) {
 		target = tripleThing[2];
 
         // create triples //
-        let pos = find_concept(source)
+        let pos = conceptRelation.find_concept(source)
         if (pos == -1){
             // add new concept to list
-            pos = numconcepts
-            concepts[numconcepts++] = source
+            pos = gb.numconcepts
+            gb.setnumconcepts(gb.numconcepts + 1)
+            gb.setconcepts(source,gb.numconcepts);
+            //gb.concepts[gb.numconcepts] = source
         }
-        triple[numtriples][0] = pos
+        gb.triple[gb.numtriples][0] = pos
 
-        pos = find_relation(relation)
+        pos = conceptRelation.find_relation(relation)
         if (pos == -1){
             // add new relation to list
-			pos = number_of_relations
-			relation_labels[number_of_relations++] = relation
+			pos = gb.number_of_relations
+            gb.setrelationlabels(relation, gb.number_of_relations)
+			//gb.relation_labels[gb.number_of_relations] = relation
         }
-        triple[numtriples][1] = pos
+        gb.triple[gb.numtriples][1] = pos
 
-        pos = find_concept(target)
+        pos = conceptRelation.find_concept(target)
         if(pos == -1){
             // add new concept to list
-            pos = numconcepts
-            concepts[numconcepts++] = target
+            pos = gb.numconcepts
+            gb.setnumconcepts(gb.numconcepts + 1)
+            gb.setconcepts(target, gb.numconcepts);
+            //gb.concepts[gb.numconcepts] = target
 		}
-		triple[numtriples++][2] = pos
+        gb.setnumtriples(gb.numtriples + 1);
+		gb.triple[gb.numtriples][2] = pos
     }
 }

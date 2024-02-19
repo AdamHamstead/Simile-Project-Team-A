@@ -1,17 +1,5 @@
 
-var cyclepaths : number = [10000][10000]; //to record each cycle path
-var numcpaths : number = 0;
-var numtriples: number = 0;
-var triple: number[][] = [[5000],[3]];
-let context: boolean[][];
-var relation_labels: string;
-var concepts: string;
-var numconcepts: number = 0;
-
-
-let SOURCE = 0		//source concept index of triple - in object
-let RELATION = 1		//relation index of triple - in object
-
+import * as gb from './GlobalVariables'
 
 import * as fs from 'fs'
 
@@ -54,21 +42,21 @@ export function output_cxt_file(fname:string): void {  //Just makes cxt file don
 	let pos: number = fname.indexOf(".");
 	let cfname:string = fname.substring(0,pos) + ".cxt";
 	fs.writeFileSync(cfname, "B\n\n");
-	fs.writeFileSync(cfname, numconcepts + "\n");
-	fs.writeFileSync(cfname, numtriples + "\n\n");
-	for(let i: number = 0; i < numconcepts; i++){
-		fs.writeFileSync(cfname, concepts[i] + "\n");
+	fs.appendFileSync(cfname, gb.numconcepts + "\n");
+	fs.appendFileSync(cfname, gb.numtriples + "\n\n");
+	for(let i: number = 0; i < gb.numconcepts; i++){
+		fs.appendFileSync(cfname, gb.concepts[i] + "\n");
 	}
-	for(let j: number = 0; j < numtriples; j++){
-		fs.writeFileSync(cfname, concepts[triple[j][SOURCE]] + " " + relation_labels[triple[j][RELATION]] + "\n");
+	for(let j: number = 0; j < gb.numtriples; j++){
+		fs.appendFileSync(cfname, gb.concepts[gb.triple[j][gb.SOURCE]] + " " + gb.relation_labels[gb.triple[j][gb.RELATION]] + "\n");
 	}
-	for(let i: number = 0; i < numconcepts; i++){
-		for(let j: number = 0; j < numtriples; j++){
-			if(context[i][j]){
-				fs.writeFileSync(cfname, "X");
+	for(let i: number = 0; i < gb.numconcepts; i++){
+		for(let j: number = 0; j < gb.numtriples; j++){
+			if(gb.context[i][j]){
+				fs.appendFileSync(cfname, "X");
 			}
 			else {
-				fs.writeFileSync(cfname, "\n");
+				fs.appendFileSync(cfname, "\n");
 			}
 		}
 	}

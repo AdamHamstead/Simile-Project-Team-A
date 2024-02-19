@@ -1,19 +1,4 @@
-let ATTRIBUTE = 0;
-let TIMES = 0;
-let OBJECT = 0;
-let SOURCE = 0;
-
-let numOutput = 0;
-let numInputs = 0;
-let numReps = 0;
-let numcpaths = 0; 
-let output_concepts: number[] = [];
-let repeats: number[][] = [];
-let cyclePaths: number[][] = [];
-let cpathSizes: number[] = [];
-
-let input_concepts: number[] = [];
-let triple: number[][] = [];
+import * as gb from './GlobalVariables'
 
 
 
@@ -26,15 +11,15 @@ export function target_already_in_pathway(target: number, path:number[][] ,pathS
 }
 
 export function is_output(target:number){
-    for (let i = 0; i <numOutput; i++){
-        if(target == output_concepts[i]) return true;
+    for (let i = 0; i < gb.numOutputs; i++){
+        if(target == gb.output_concepts[i]) return true;
     }
     return false;
 }
 
 export function is_input(attribute:number){
-    for(let i = 0; i < numInputs; i++){
-		if(triple[attribute][SOURCE] == input_concepts[i]) return true;
+    for(let i = 0; i < gb.numInputs; i++){
+		if(gb.triple[attribute][gb.SOURCE] == gb.input_concepts[i]) return true;
 	}
 	return false;
 
@@ -42,26 +27,27 @@ export function is_input(attribute:number){
 
 export function add_to_repeats(target: number, attribute: number){
 	var i:number = 0;
-	for(let i = 0; i < numReps; i++){
-		if(attribute == repeats[i][ATTRIBUTE] && target == repeats[i][OBJECT]){
-			repeats[i][TIMES]++;
+	for(let i = 0; i < gb.numReps; i++){
+		if(attribute == gb.repeats[i][gb.ATTRIBUTE] && target == gb.repeats[i][gb.OBJECT]){
+			gb.repeats[i][gb.TIMES]++;
 			break;
 		}
 	}
-	if(i == numReps){
-		repeats[numReps][ATTRIBUTE] = attribute;
-		repeats[numReps][OBJECT] = target;
-		repeats[numReps][TIMES] = 1;
-		numReps++;
+	if(i == gb.numReps){
+		gb.repeats[gb.numReps][gb.ATTRIBUTE] = attribute;
+		gb.repeats[gb.numReps][gb.OBJECT] = target;
+		gb.repeats[gb.numReps][gb.TIMES] = 1;
+		gb.setnumReps(gb.numReps + 1);
+		//gb.numReps++;
 	}
 }
 
 export function repeat_is_not_in_a_cycle(target:number, source:number){
-	for(let p = 0; p < numcpaths; p++){
-		for(let i = 0; i < cpathSizes[p]; i++){
-			if(target == cyclePaths[p][i]){
-				for(let j = 0; j < cpathSizes[p]; j++){
-					if(source == cyclePaths[p][j]) return false;
+	for(let p = 0; p < gb.numcpaths; p++){
+		for(let i = 0; i < gb.cpathsizes[p]; i++){
+			if(target == gb.cyclePaths[p][i]){
+				for(let j = 0; j < gb.cpathsizes[p]; j++){
+					if(source == gb.cyclePaths[p][j]) return false;
 				}
 			}
 		}
@@ -70,12 +56,12 @@ export function repeat_is_not_in_a_cycle(target:number, source:number){
 }
 
 export function is_new_cycle(path:number[][], pathsize:number){
-	for(let p=0; p<numcpaths; p++){
-		if(pathsize == cpathSizes[p]){
+	for(let p=0; p<gb.numcpaths; p++){
+		if(pathsize == gb.cpathsizes[p]){
 			var found = 0;
 			for(let i = 0; i < pathsize; i++){
 				for(let j = 0; j < pathsize; j++){
-					if(path[i][0] == cyclePaths[p][j]){
+					if(path[i][0] == gb.cyclePaths[p][j]){
 						found++;
 						//this break is to avoid double-counting of a CG concept if it appears more than once in the cycle
 						//this is possible if a concept is at the cross-roads of a figure-of-eight cycle, for example.
