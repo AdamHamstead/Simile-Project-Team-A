@@ -44,9 +44,9 @@ using namespace std;
 
 #define MAX_ROWS 1000	//Max rows (objects) in context
 #define MAX_COLS 1000	//Max columns (attributes) in context
-#define SOURCE 0		//source concept index of triple
-#define RELATION 1		//relation index of triple
-#define TARGET 2		//target concept index of triple
+#define SOURCE 0		//source concept index of triple - in object
+#define RELATION 1		//relation index of triple - in object
+#define TARGET 2		//target concept index of triple - in object
 
 //for recording and counting repeated binaries
 #define ATTRIBUTE 0
