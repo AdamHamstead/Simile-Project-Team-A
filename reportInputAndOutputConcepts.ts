@@ -12,7 +12,7 @@ let concepts: string[];
 import * as fs from 'fs'
 
 
-export function reportInputAndOuputConcepts(fname:string){ //Creates and writes to the report.txt file 
+export function reportInputAndOuputConcepts(rfname:string){ //Creates and writes to the report.txt file 
 
 
 	//find input concepts (the start nodes)
@@ -40,28 +40,28 @@ export function reportInputAndOuputConcepts(fname:string){ //Creates and writes 
 	//report input concepts
 	if(numInputs==0){
         console.log("\n\nThere are no inputs");
-        fs.writeFileSync(fname, "\n\nThere are no inputs");
+        fs.writeFileSync(rfname, "\n\nThere are no inputs");
 	}
 	else {
         console.log("\n\nInputs: ");
-        fs.writeFileSync(fname, "\n\nInputs: ")
+        fs.writeFileSync(rfname, "\n\nInputs: ")
 		for(let i:number = 0; i < numInputs; i++){
             console.log("\"" + concepts[input_concepts[i]] + "\" ");
-            fs.writeFileSync(fname, '\"' + concepts[input_concepts[i]] + "\" ") 
+            fs.writeFileSync(rfname, '\"' + concepts[input_concepts[i]] + "\" ") 
 		}
 	}
 
 	//report output concepts
 	if(numOutputs==0){
         console.log("\n\nThere are no outputs.");
-        fs.writeFileSync(fname, "\n\nThere are no outputs.");
+        fs.writeFileSync(rfname, "\n\nThere are no outputs.");
 	}
 	else {
         console.log("\n\nOutputs: ");
-        fs.writeFileSync(fname, "\n\nOutputs: ");
+        fs.writeFileSync(rfname, "\n\nOutputs: ");
 		for(let i:number = 0; i < numOutputs; i++) {
             console.log('\"' + concepts[output_concepts[i]] + "\" ")
-            fs.writeFileSync(fname, '\"' + concepts[output_concepts[i]] + "\" ");
+            fs.writeFileSync(rfname, '\"' + concepts[output_concepts[i]] + "\" ");
 		}
 	}
 }

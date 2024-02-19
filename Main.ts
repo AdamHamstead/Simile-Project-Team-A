@@ -1,21 +1,25 @@
-let fname:string = "";
+let fname:string;
 let cpathsizes : number[] = [10000];
 
 import * as fs from 'fs'
 import * as triplesBinaries from "./triples_to_binaries+add_binaries"
 import * as cxt from "./Line700-778" 
 import * as concepts from "././reportInputAndOutputConcepts"
+
 main();
 function main(){
 
 	for(let p:number = 0; p < 100; p++) {
         cpathsizes[p]=0; 
     }
-	console.log("\n\nEnter cgif or delimiter separated triples file name including extension: ");
 	//cin >> fname;
-    fname = "01a-Cat-Mat-Colour.cgif";
+	console.log("\n\nEnter cgif or delimiter separated triples file name including extension: ");
+
+	fname = "buiness.csv";
 	//find out if file is cgif or csv format
-	if(fname.substring( fname.length - 3 ) == "gif")
+	if(fname.substring( fname.length - 3 ) == "xml")
+		console.log("XML");
+	else if(fname.substring( fname.length - 3 ) == "gif")
 		//cgif.input_cgif_file(fname); //Rewrite this to intake xml files
         console.log("CGIF")
 	else
@@ -29,7 +33,7 @@ function main(){
 
     fs.writeFileSync(rfname, "Triples to Binaries Report for " + fname + "\n\n");
 
-	concepts.reportInputAndOuputConcepts(fname); //writes data to report txt file
+	concepts.reportInputAndOuputConcepts(rfname); //writes data to report txt file
 
 	triplesBinaries.triples_to_binaries();
 

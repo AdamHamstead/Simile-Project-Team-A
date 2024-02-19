@@ -1,16 +1,9 @@
 
-var require: any 
-var fs = require('fs');
-
-var fname : string;			
-var rfname : string;			
-var cfname : string;	
-var cyclepaths : number[][] = [[10000],[10000]]; //to record each cycle path
-var cpathsizes : number[] = [10000];
+var cyclepaths : number = [10000][10000]; //to record each cycle path
 var numcpaths : number = 0;
 var numtriples: number = 0;
 var triple: number[][] = [[5000],[3]];
-var context: boolean;
+let context: boolean[][];
 var relation_labels: string;
 var concepts: string;
 var numconcepts: number = 0;
@@ -58,9 +51,8 @@ function is_new_cycle(path,[],[]: number[][], pathsize: number): boolean{
 }
 */
 export function output_cxt_file(fname:string): void {  //Just makes cxt file dont need to change much exept global variables
-	let pos: number = fname.search(".");
-	let cfname = fname.substring(0,pos);
-	cfname += ".cxt";
+	let pos: number = fname.indexOf(".");
+	let cfname:string = fname.substring(0,pos) + ".cxt";
 	fs.writeFileSync(cfname, "B\n\n");
 	fs.writeFileSync(cfname, numconcepts + "\n");
 	fs.writeFileSync(cfname, numtriples + "\n\n");
