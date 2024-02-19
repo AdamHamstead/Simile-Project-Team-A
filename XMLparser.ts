@@ -30,8 +30,6 @@ function ReadXML(source: any){
         .then((text) => {
             const words = text.split('/n'); //splits the text on new line
             words.forEach(element => {
-            if(element.search("mxCell")&&element.search("value")){ //searches for a line with both mxCell and value
-                usefulData.push(element); //pushes that line to the array usefulData
             if(element.includes("mxCell")&&element.includes("value")){
                 usefulData.push(element);
             }  
