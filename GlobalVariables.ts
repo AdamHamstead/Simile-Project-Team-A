@@ -11,6 +11,7 @@ export let repeats: number[][] = [];
 export let cyclepaths: number[][] = [];
 //let cpathsizes: number[] = [];
 export let numcpaths:number = 0; 
+export let referents:string[];
 
 
 export let triple: number[][] = [];

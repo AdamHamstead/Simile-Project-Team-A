@@ -36,7 +36,7 @@ function main(){
 
 	concepts.reportInputAndOuputConcepts(rfname); //writes data to report txt file
 
-	triplesBinaries.triples_to_binaries();
+	triplesBinaries.triples_to_binaries(rfname);
 
 	cxt.output_cxt_file(fname); //Can keep this just make sure it works the same with xml files
     console.log("\n\nHit <enter> to finish");
