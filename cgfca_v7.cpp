@@ -53,16 +53,16 @@ using namespace std;
 #define OBJECT 1
 #define TIMES 2
 
-int triple[5000][3];		//SourceConcept|relation|TargetConcept		//Used literally everywhere
-int numtriples = 0;			//number of triples
+int triple[5000][3];		//SourceConcept|relation|TargetConcept		//Used literally everywhere - in object
+int numtriples = 0;			//number of triples 
 
-string referents[1000];	//CG Concept labels in cgif file
-string concepts[1000];	//FCA formal object name = GC Target Concept
+string referents[1000];	//CG Concept labels in cgif file - handled by object
+string concepts[1000];	//FCA formal object name = GC Target Concept - handled by object
 
 int numrelations = 0; //Is defined then never used?????????*
 
-string relation_labels[1000];
-string relation_referent_lists[1000];
+string relation_labels[1000]; // - handled by object
+string relation_referent_lists[1000]; // - handled by object
 int number_of_relations = 0;
 
 int numconcepts = 0;	//number of FCA formal objects = number of CG Target Concepts
