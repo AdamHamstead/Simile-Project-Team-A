@@ -2,34 +2,42 @@ import * as gb from './GlobalVariables'
 
 
 
-export function target_already_in_pathway(target: number, path:number[][] ,pathSize: number){
-    var count = 0;
+export function target_already_in_pathway(target: number, path:number[][] = Array.from(Array(), () => new Array(2).fill(0)) ,pathSize: number){
+    let count:number = 0;
     for (let p = 0; p<pathSize; p++){
-        if(target==path[p][0]) count++;
+        if(target==path[p][0]) {
+			count++;
+		}
     }
     return count;
 }
 
 export function is_output(target:number){
     for (let i = 0; i < gb.numOutputs; i++){
-        if(target == gb.output_concepts[i]) return true;
+        if(target == gb.output_concepts[i]){
+			return true;
+		}
     }
     return false;
 }
 
 export function is_input(attribute:number){
     for(let i = 0; i < gb.numInputs; i++){
-		if(gb.triple[attribute][gb.SOURCE] == gb.input_concepts[i]) return true;
+		if(gb.triple[attribute][gb.SOURCE] == gb.input_concepts[i]) {
+			return true;
+		}
 	}
 	return false;
 
 }
 
 export function add_to_repeats(target: number, attribute: number){
-	var i:number = 0;
-	for(let i = 0; i < gb.numReps; i++){
+	let i:number = 0;
+	for(i = 0; i < gb.numReps; i++){
 		if(attribute == gb.repeats[i][gb.ATTRIBUTE] && target == gb.repeats[i][gb.OBJECT]){
+			console.log(gb.repeats[i][gb.TIMES])
 			gb.repeats[i][gb.TIMES]++;
+			console.log(gb.repeats[i][gb.TIMES])
 			break;
 		}
 	}
@@ -47,7 +55,9 @@ export function repeat_is_not_in_a_cycle(target:number, source:number){
 		for(let i = 0; i < gb.cpathsizes[p]; i++){
 			if(target == gb.cyclePaths[p][i]){
 				for(let j = 0; j < gb.cpathsizes[p]; j++){
-					if(source == gb.cyclePaths[p][j]) return false;
+					if(source == gb.cyclePaths[p][j]) {
+						return false;
+					}
 				}
 			}
 		}
@@ -55,10 +65,10 @@ export function repeat_is_not_in_a_cycle(target:number, source:number){
 	return true;
 }
 
-export function is_new_cycle(path:number[][], pathsize:number){
+export function is_new_cycle(path:number[][] = Array.from(Array(), () => new Array(2).fill(0)), pathsize:number){
 	for(let p=0; p<gb.numcpaths; p++){
 		if(pathsize == gb.cpathsizes[p]){
-			var found = 0;
+			let found:number = 0;
 			for(let i = 0; i < pathsize; i++){
 				for(let j = 0; j < pathsize; j++){
 					if(path[i][0] == gb.cyclePaths[p][j]){
@@ -69,7 +79,7 @@ export function is_new_cycle(path:number[][], pathsize:number){
 					}
 				}
 			}
-			if(found == pathsize) return false;
+			if(found == pathsize) {return false};
 		}
 	}
 	return true;

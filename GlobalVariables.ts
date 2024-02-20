@@ -11,7 +11,9 @@ export let numReps = 0;
 export function setnumReps(value:number){
     numReps = value;
 }
-export let repeats: number[][] = [];
+
+
+export let repeats: number[][] = Array.from(Array(10000), () => new Array(3).fill(0));
 //export let cyclePaths: number[][] = [];
 export let cyclePaths: number[][] = Array.from(Array(10000), () => new Array(10000).fill(0));
 
@@ -48,7 +50,7 @@ export let MAX_ROWS = 1000;
 export let MAX_COLS = 1000;
 //bool context[MAX_ROWS][MAX_COLS];
 //export let context: boolean[][];
-export let context: boolean[][] = Array.from(Array(MAX_ROWS), () => new Array(MAX_COLS).fill(0)); //Look at this later**
+export let context: boolean[][] = Array.from(Array(MAX_ROWS), () => new Array(MAX_COLS).fill(0));
 
 export let concepts: string[] = new Array(1000);	//FCA formal object name = GC Target Concept
 
@@ -72,6 +74,10 @@ export let numInputs = 0;
 
 export function setnumInputs(value:number){
     numInputs = value;
+}
+
+export function setnumOutputs(value:number){
+    numOutputs = value;
 }
 //let concepts: string[];
 
@@ -105,7 +111,7 @@ export function setnumInputs(value:number){
 //let input_concepts: number[] = [];
 //let triple: number[][] = [];
 
-export let number_of_relations: number
+export let number_of_relations: number = 0;
 
 export function setnumber_of_relations(value:number){
     number_of_relations = value;

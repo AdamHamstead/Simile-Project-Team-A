@@ -38,6 +38,8 @@ export function input_csv_file(fname: string) {
 
     let fileContent = fs.readFileSync(fname, 'utf8')
     for (const line of fileContent.split(/[\r\n]+/)){
+        if (line != ''){
+
         
         n = 0
         escaped = false
@@ -73,8 +75,8 @@ export function input_csv_file(fname: string) {
         if (pos == -1){
             // add new concept to list
             pos = gb.numconcepts
-            gb.setnumconcepts(gb.numconcepts + 1)
             gb.setconcepts(source,gb.numconcepts);
+            gb.setnumconcepts(gb.numconcepts + 1);
             //gb.concepts[gb.numconcepts] = source
         }
         gb.triple[gb.numtriples][0] = pos
@@ -84,6 +86,8 @@ export function input_csv_file(fname: string) {
             // add new relation to list
 			pos = gb.number_of_relations
             gb.setrelationlabels(relation, gb.number_of_relations)
+            console.log(gb.relation_labels[gb.number_of_relations]);
+            gb.setnumber_of_relations(gb.number_of_relations + 1)
 			//gb.relation_labels[gb.number_of_relations] = relation
         }
         gb.triple[gb.numtriples][1] = pos
@@ -92,11 +96,12 @@ export function input_csv_file(fname: string) {
         if(pos == -1){
             // add new concept to list
             pos = gb.numconcepts
-            gb.setnumconcepts(gb.numconcepts + 1)
             gb.setconcepts(target, gb.numconcepts);
+            gb.setnumconcepts(gb.numconcepts + 1)
             //gb.concepts[gb.numconcepts] = target
 		}
-        gb.setnumtriples(gb.numtriples + 1);
 		gb.triple[gb.numtriples][2] = pos
+        gb.setnumtriples(gb.numtriples + 1);
     }
+}
 }

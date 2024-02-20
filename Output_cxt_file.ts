@@ -38,7 +38,7 @@ function is_new_cycle(path,[],[]: number[][], pathsize: number): boolean{
 	return true;
 }
 */
-export function output_cxt_file(fname:string): void {  //Just makes cxt file dont need to change much exept global variables
+export function output_cxt_file(fname:string) { 
 	let pos: number = fname.indexOf(".");
 	let cfname:string = fname.substring(0,pos) + ".cxt";
 	fs.writeFileSync(cfname, "B\n\n");
@@ -56,8 +56,9 @@ export function output_cxt_file(fname:string): void {  //Just makes cxt file don
 				fs.appendFileSync(cfname, "X");
 			}
 			else {
-				fs.appendFileSync(cfname, "\n");
+				fs.appendFileSync(cfname, ".");
 			}
 		}
+		fs.appendFileSync(cfname, "\n");
 	}
 }

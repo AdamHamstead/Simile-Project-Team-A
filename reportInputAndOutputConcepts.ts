@@ -12,20 +12,21 @@ export function reportInputAndOuputConcepts(rfname:string){ //Creates and writes
 			if(i == gb.triple[j][gb.TARGET]) break;
 		}
 		if(j == gb.numtriples){
-			gb.setnumInputs(gb.numInputs + 1)
 			gb.input_concepts[gb.numInputs]=i;
+			gb.setnumInputs(gb.numInputs + 1)
 		}
 	}
 
 	//find output concepts (the end nodes)
 	for(let i:number=0; i < gb.numconcepts; i++){
-		let j:number;
+		let j:number = 0;
 		for(j = 0; j < gb.numtriples; j++){
-			if(i == gb.triple[j][gb.SOURCE]) break;
+			if(i == gb.triple[j][gb.SOURCE]) {break;}
 		}
 		if(j == gb.numtriples){
-			gb.setnumInputs(gb.numInputs + 1)
-			gb.output_concepts[gb.numOutputs]=i; //Globab Variables...
+			gb.output_concepts[gb.numOutputs]=i;
+			gb.setnumOutputs(gb.numOutputs + 1);
+
 		}
 	}
 
@@ -38,6 +39,9 @@ export function reportInputAndOuputConcepts(rfname:string){ //Creates and writes
         console.log("\n\nInputs: ");
         fs.appendFileSync(rfname, "\n\nInputs: ")
 		for(let i:number = 0; i < gb.numInputs; i++){
+			console.log(gb.input_concepts[i])
+			console.log(gb.concepts[gb.input_concepts[i]]);
+			console.log(gb.concepts[1]);
             console.log("\"" + gb.concepts[gb.input_concepts[i]] + "\" ");
             fs.appendFileSync(rfname, '\"' + gb.concepts[gb.input_concepts[i]] + "\" ") 
 		}

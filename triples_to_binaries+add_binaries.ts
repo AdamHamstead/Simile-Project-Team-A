@@ -8,7 +8,7 @@ import * as fs from 'fs'; //File reading and writing
 
 
 export function triples_to_binaries(rfname:string){
-    let path: number[][] = Array.from(Array(100000), () => new Array(2).fill(0)); //Look at this later**
+    let path: number[][] = Array.from(Array(100000), () => new Array(2).fill(0));
     //let path:number[100000][]; //to record each transitive path through triples
     let pathSize:number = 0;
 
@@ -16,7 +16,7 @@ export function triples_to_binaries(rfname:string){
     for(let attribute:number = 0; attribute<gb.numtriples; attribute++){
         let target:number = gb.triple[attribute][gb.TARGET];
         let relation:number = gb.triple[attribute][gb.RELATION];
-        let source = gb.triple[attribute][gb.SOURCE];
+        let source:number = gb.triple[attribute][gb.SOURCE];
         add_binary(attribute, source, relation, target, path, pathSize, rfname);
     }
 
@@ -51,6 +51,12 @@ function add_binary(attribute:number, source:number, relation:number, target:num
         //add a cross in the formal context for the attribute and target (object)
         gb.context[target][attribute] = true;
 
+
+        console.log(gb.relation_labels[path[0][1]]);
+        console.log(gb.relation_labels[path[1][1]]);
+        console.log(gb.relation_labels[path[2][1]]);
+
+
         //if object is an output and attribute involves an input then report pathway
         if(f.is_output(target) && f.is_input(attribute)){
             console.log("\n\nDirect Pathway: ");
@@ -71,7 +77,7 @@ function add_binary(attribute:number, source:number, relation:number, target:num
                 for (let p = 0; p<pathSize; p++){
                     console.log(gb.concepts[path[p][0]] + " - " + gb.relation_labels[path[p][1]] + " - ");
                     fs.appendFileSync(rfname, gb.concepts[path[p][0]] + " - " + gb.relation_labels[path[p][1]] + " - ");
-                    gb.cyclePaths[gb.numcpaths][p] = path[p][0]; //ERRORS HERE *****
+                    gb.cyclePaths[gb.numcpaths][p] = path[p][0];
                 }
                 console.log(gb.concepts[path[0][0]]);
                 fs.appendFileSync(rfname, gb.concepts[path[0][0]]);

@@ -3,7 +3,7 @@ import * as csv from './input_csv_file'
 import * as fs from 'fs'
 import * as triplesBinaries from "./triples_to_binaries+add_binaries"
 import * as cxt from "./Output_cxt_file" 
-import * as concepts from "./reportInputAndOutputConcepts"
+import * as concepts2 from "./reportInputAndOutputConcepts"
 
 let fname:string;
 
@@ -24,7 +24,7 @@ function main(){
 		//cgif.input_cgif_file(fname); //Rewrite this to intake xml files
         console.log("CGIF")
 	else
-	    csv.input_csv_file(fname); //Can mostly leave this with csv files just rewrite for nodejs
+	csv.input_csv_file(fname); //Can mostly leave this with csv files just rewrite for nodejs
 
 	let pos:number = fname.indexOf(".");
 	let rfname:string = fname.substring(0,pos);
@@ -33,7 +33,7 @@ function main(){
 
     fs.writeFileSync(rfname, "Triples to Binaries Report for " + fname + "\n\n");
 
-	concepts.reportInputAndOuputConcepts(rfname); //writes data to report txt file
+	concepts2.reportInputAndOuputConcepts(rfname); //writes data to report txt file
 
 	triplesBinaries.triples_to_binaries(rfname);
 
