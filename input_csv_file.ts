@@ -1,6 +1,6 @@
 import * as gb from './GlobalVariables'
 
-import * as conceptRelation from './FindConceptFindRelation'
+import * as conceptRelation from './FindConceptFindRelation-not needed'
 
 import * as fs from 'fs'
 import * as readline from 'readline'

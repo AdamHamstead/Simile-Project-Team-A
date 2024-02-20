@@ -25,7 +25,7 @@ export class Concept
         this.value = value;
     }
 
-    public AddRelation(relation: Relation)
+    public AddRelation(relation: Relation) 
     {
         this.relations.push(relation);
     }

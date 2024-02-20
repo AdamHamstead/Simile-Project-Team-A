@@ -1,7 +1,7 @@
 import * as gb from './GlobalVariables'
 import * as csv from './input_csv_file'
 import * as fs from 'fs'
-import * as triplesBinaries from "./triples_to_binaries+add_binaries"
+import * as triplesBinaries from "./triples_to_binaries+add_binaries -not needed"
 import * as cxt from "./Output_cxt_file" 
 import * as concepts from "./reportInputAndOutputConcepts"
 
