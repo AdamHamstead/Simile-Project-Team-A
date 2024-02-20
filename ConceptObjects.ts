@@ -79,13 +79,21 @@ export class Relation
 {
     private value: string;
     private source: Concept;
-    private target: Concept;
+    private target: any = null;
 
-    public constructor(source: Concept, target: Concept, value: string)
+    public constructor(value: string, source: Concept, target?: Concept)
     {
         this.source = source;
-        this.target = target;
         this.value = value;
+        if(target)
+        {
+            this.target = target;
+        }
+    }
+
+    public setTarget(target: Concept)
+    {
+        this.target = target;
     }
     
     public getValue()
