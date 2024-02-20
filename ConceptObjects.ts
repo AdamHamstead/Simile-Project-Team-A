@@ -19,17 +19,10 @@ export class Concept
 {
     private value: string;
     private relations = new Array<Relation>;
-    private position: number = -1;
-    private numberOfRelations: number;
-    private numberOfConcepts: number;
-    private relationLabels: string[1000];
 
-    public constructor(value:string, relationLabels: string[1000], numberOfRelations: number, numberOfConcepts: number)
+    public constructor(value:string) //Don't really want to change the constructor, the concept object just wants to keep track of a value and its relations
     {
         this.value = value;
-        this.relationLabels = relationLabels;
-        this.numberOfRelations = numberOfRelations;
-        this.numberOfConcepts = numberOfConcepts;
     }
 
     public AddRelation(relation: Relation)
@@ -70,15 +63,15 @@ export class Concept
     }*/
 
     //Does same thing as searchForTarget maybe???
-    public find_concept(concept: string): number{
-        for(let i: number = 0; i < this.numberOfConcepts; i++){
-            if(concept == this.relations[i].toString()){
-                this.position = i;
-                break;
-            }
-        }
-        return(this.position);
-    }
+    // public find_concept(concept: string): number{
+    //     for(let i: number = 0; i < this.numberOfConcepts; i++){
+    //         if(concept == this.relations[i].toString()){
+    //             this.position = i;
+    //             break;
+    //         }
+    //     }
+    //     return(this.position);
+    // }
 
 }
 
