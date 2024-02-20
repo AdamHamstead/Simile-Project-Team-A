@@ -1,18 +1,19 @@
-import { Concept } from './ConceptObjects';
-import { Relation } from "./ConceptObjects";
+
 //const Concept = await import("./ConceptObjects");
 //const Relation = await import("./ConceptObjects");
 
-XMLParserEntry();
+import { Concept } from './ConceptObjects';
+import { Relation } from "./ConceptObjects";
 
-function XMLParserEntry(){
-    let source = "C:\Users\adamh\OneDrive\Documents\GitHub\Simile-Project-Team-A\XMLExamples\CatOnMat.xml" //source of XML file - will be  dynamic later
-    let data:string[] = ReadXML(source);
-    const rootids = FindRootNode(data);
-    let roots = new Array<Concept>;
-    rootids.forEach(element => {
-        roots.push(CreateConcept(element,data) as Concept);
-    });
+XMLParserEntry();
+function XMLParserEntry(){  
+    // let source = "C:\Users\adamh\OneDrive\Documents\GitHub\Simile-Project-Team-A\XMLExamples\CatOnMat.xml" //source of XML file - will be  dynamic later
+    // let data:string[] = ReadXML(source);
+    // const rootids = FindRootNode(data);
+    // let roots = new Array<Concept>;
+    // rootids.forEach(element => {
+    //     roots.push(CreateConcept(element,data) as Concept);
+    // });
 }
 
 function ReadXML(source: any){
