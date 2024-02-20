@@ -1,5 +1,7 @@
 import { Concept } from './ConceptObjects';
 import { Relation } from "./ConceptObjects";
+//const Concept = await import("./ConceptObjects");
+//const Relation = await import("./ConceptObjects");
 
 XMLParserEntry();
 
