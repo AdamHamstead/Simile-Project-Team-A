@@ -1,3 +1,5 @@
+import { Concept } from "./ConceptObjects";
+
 export let cpathsizes : number[] = [10000];
 
 export let RELATION = 1;		//relation index of triple
@@ -64,9 +66,9 @@ export function setnumconcepts(value:number){
 }
 //let numtriples = 0;
 //let TARGET = 2;
-export let input_concepts: number[] = [];
+export let input_concepts: Concept[] = [];
 //let SOURCE = 0;
-export let output_concepts: number[] = [];
+export let output_concepts: Concept[] = [];
 export let numOutputs = 0;
 export let numInputs = 0;
 

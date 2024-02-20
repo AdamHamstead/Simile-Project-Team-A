@@ -15,7 +15,7 @@
 
 */
 
-class Concept
+export class Concept
 {
     private value: string;
     private relations = new Array<Relation>;
@@ -52,7 +52,7 @@ class Concept
     }
 }
 
-class Relation
+export class Relation
 {
     private value: string;
     private source: Concept;
