@@ -1,8 +1,7 @@
-fs = require('fs');
-import { Readline } from "node:readline/promises";
 import { Concept } from './ConceptObjects';
 import { Relation } from "./ConceptObjects";
 
+XMLParserEntry();
 
 function XMLParserEntry(){
     let source = "C:\Users\adamh\OneDrive\Documents\GitHub\Simile-Project-Team-A\XMLExamples\CatOnMat.xml" //source of XML file - will be  dynamic later
