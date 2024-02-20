@@ -1,4 +1,5 @@
-
+// ONLY USED FOR CGIF - NOT NEEDED //
+/*
 function extractCGconceptTypeLabelandReferent(type_and_referent){
 
 	let startofreferent = type_and_referent.find(":", 0);
@@ -92,3 +93,4 @@ function searchforreferent(referent)
 	}
 	return pos;
 }
+*/
