@@ -16,25 +16,25 @@
 */
 export class Concept
 {
-    private value: string;
-    private relations = new Array<Relation>;
+    value;
+    relationsnew = Array();
 
-    public constructor(value:string)
+    constructor(value)
     {
         this.value = value;
     }
 
-    public AddRelation(relation: Relation)
+    AddRelation(relation)
     {
         this.relations.push(relation);
     }
     
-    public getValue()
+    getValue()
     {
         return this.value;
     }
 
-    public searchForTarget(value: string)
+    searchForTarget(value)
     {
         this.relations.forEach(element => //loop through all relations 
         {
@@ -53,28 +53,28 @@ export class Concept
 
 export class Relation
 {
-    private value: string;
-    private source: Concept;
-    private target: Concept;
+    value;
+    source;
+    target;
 
-    public constructor(source: Concept, target: Concept, value: string)
+    constructor(source, target, value)
     {
         this.source = source;
         this.target = target;
         this.value = value;
     }
     
-    public getValue()
+    getValue()
     {
         return this.value
     }
 
-    public getTarget()
+    getTarget()
     {
         return this.target;
     }
 
-    public getSource()
+    getSource()
     {
         return this.source
     }
