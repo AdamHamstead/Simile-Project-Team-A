@@ -7,9 +7,9 @@ export function reportInputAndOuputConcepts(rfname:string){ //Creates and writes
 
 	//find input concepts (the start nodes)
 	for(let i:number=0; i < gb.numconcepts; i++){
-		let j:number;
+		let j:number = 0;
 		for(j = 0; j < gb.numtriples; j++){
-			if(i == gb.triple[j][gb.TARGET]) break;
+			if(i == gb.triple[j][gb.TARGET]) {break};
 		}
 		if(j == gb.numtriples){
 			gb.input_concepts[gb.numInputs]=i;
@@ -26,7 +26,6 @@ export function reportInputAndOuputConcepts(rfname:string){ //Creates and writes
 		if(j == gb.numtriples){
 			gb.output_concepts[gb.numOutputs]=i;
 			gb.setnumOutputs(gb.numOutputs + 1);
-
 		}
 	}
 

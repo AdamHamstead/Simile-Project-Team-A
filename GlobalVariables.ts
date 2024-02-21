@@ -66,9 +66,9 @@ export function setnumconcepts(value:number){
 }
 //let numtriples = 0;
 //let TARGET = 2;
-export let input_concepts: number[] = [];
+export let input_concepts: number[] = new Array(1000);
 //let SOURCE = 0;
-export let output_concepts: number[] = [];
+export let output_concepts: number[] = new Array(1000);	
 export let numOutputs = 0;
 export let numInputs = 0;
 

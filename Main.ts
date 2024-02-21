@@ -17,14 +17,11 @@ function main(){
 	console.log("\n\nEnter cgif or delimiter separated triples file name including extension: ");
 
 	fname = "buiness.csv";
-	//find out if file is cgif or csv format
+	//find out if file is xml or csv format
 	if(fname.substring( fname.length - 3 ) == "xml")
 		console.log("XML");
-	else if(fname.substring( fname.length - 3 ) == "gif")
-		//cgif.input_cgif_file(fname); //Rewrite this to intake xml files
-        console.log("CGIF")
 	else
-	csv.input_csv_file(fname); //Can mostly leave this with csv files just rewrite for nodejs
+	csv.input_csv_file(fname);
 
 	let pos:number = fname.indexOf(".");
 	let rfname:string = fname.substring(0,pos);

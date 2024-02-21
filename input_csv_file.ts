@@ -21,7 +21,7 @@ export function input_csv_file(fname: string) {
     let source: string
     let relation: string
     let target: string
-    let tripleThing: string[] // source-relation-target
+    let tripleThing: string[] = ["", "", ""]// source-relation-target
     let n = 0
     let a: string
     let escaped: boolean
@@ -43,7 +43,9 @@ export function input_csv_file(fname: string) {
         
         n = 0
         escaped = false
-        tripleThing = ["","",""]
+        tripleThing[0] = ""
+        tripleThing[1] = ""
+        tripleThing[2] = ""
         
         for (let char = 0; char < line.length; char++){
             a = line[char]
@@ -80,13 +82,12 @@ export function input_csv_file(fname: string) {
             //gb.concepts[gb.numconcepts] = source
         }
         gb.triple[gb.numtriples][0] = pos
-
+        
         pos = conceptRelation.find_relation(relation)
         if (pos == -1){
             // add new relation to list
 			pos = gb.number_of_relations
             gb.setrelationlabels(relation, gb.number_of_relations)
-            console.log(gb.relation_labels[gb.number_of_relations]);
             gb.setnumber_of_relations(gb.number_of_relations + 1)
 			//gb.relation_labels[gb.number_of_relations] = relation
         }
