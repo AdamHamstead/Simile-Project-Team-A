@@ -1,35 +1,30 @@
 
 //const Concept = await import("./ConceptObjects");
 //const Relation = await import("./ConceptObjects");
-
+const fs = require('fs');
 import { Concept } from './ConceptObjects';
 import { Relation } from "./ConceptObjects";
 
 XMLParserEntry();
-function XMLParserEntry(){  
-    // let source = "C:\Users\adamh\OneDrive\Documents\GitHub\Simile-Project-Team-A\XMLExamples\CatOnMat.xml" //source of XML file - will be  dynamic later
-    // let data:string[] = ReadXML(source);
-    // const rootids = FindRootNode(data);
-    // let roots = new Array<Concept>;
-    // rootids.forEach(element => {
-    //     roots.push(CreateConcept(element,data) as Concept);
-    // });
+function XMLParserEntry(){ 
+    let source = "\CatOnMat.xml" //source of XML file - will be  dynamic later
+    let data:string[] = ReadXML(source);
+    const rootids = FindRootNode(data);
+    let roots = new Array<Concept>;
+    rootids.forEach(element => {
+        roots.push(CreateConcept(element,data) as Concept);
+    });
 }
 
 function ReadXML(source: any){
     let usefulData :string[]= [];
-    fetch(source) //gets the file
-        .then((res) => res.text()) //waits for response and changes it to text
-        .then((text) => {
-            const words = text.split('/n'); //splits the text on new line
-            words.forEach(element => {
-            if(element.includes("mxCell")&&element.includes("value")){
-                usefulData.push(element);
-            }  
-            });
-
-        })
-    .catch((e) => console.error(e));
+    let allFileContents:string = fs.readFileSync(source);
+    let lines:string[] = allFileContents.split(/\r?\n/)
+    lines.forEach(line => {
+        console.log(`Line from file: ${line}`);
+        if(line.includes("mxCell")&&line.includes("value"))
+          usefulData.push(line);
+    });
     return usefulData;
 }
 function FindRootNode(data:string[]){
