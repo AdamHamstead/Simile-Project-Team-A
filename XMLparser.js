@@ -8,23 +8,23 @@ import { Relation } from "./ConceptObjects.js";
 console.log("hello world")
 XMLParserEntry();
 function XMLParserEntry(){  
-    // let source = fs.readFileSync('foo.txt','utf8'); //source of XML file - will be  dynamic later
-    // let data = ReadXML(source);
-    // const rootids = FindRootNode(data);
-    // let roots = [];
-    // rootids.forEach(element => {
-    //     roots.push(CreateConcept(element,data));
-    // });
+    let source = "CatOnMat.xml"; //source of XML file - will be  dynamic later
+    let data = ReadXML(source);
+    const rootids = FindRootNode(data);
+    let roots = [];
+    rootids.forEach(element => {
+        roots.push(CreateConcept(element,data));
+    });
 }
 
 function ReadXML(source){
     let usefulData = [];
-            // const words = source.split('/n'); //splits the text on new line
-            // words.forEach(element => {
-            // if(element.includes("mxCell")&&element.includes("value")){
-            //     usefulData.push(element);
-            // }  
-            // }
+    const words = source.split('/n'); //splits the text on new line
+    words.forEach(element => {
+        if(element.includes("mxCell")&&element.includes("value")){
+            usefulData.push(element);
+        }  
+    });
     return usefulData;
 }
 function FindRootNode(data){
