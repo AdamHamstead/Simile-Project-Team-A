@@ -2,12 +2,12 @@
 //const Concept = await import("./ConceptObjects");
 //const Relation = await import("./ConceptObjects");
 import * as fs from 'fs';
-import { Concept } from './ConceptObjects';
-import { Relation } from "./ConceptObjects";
+import { Concept } from './ConceptObjects.js';
+import { Relation } from "./ConceptObjects.js";
 
+console.log("hello world")
 XMLParserEntry();
-function XMLParserEntry(){
-    console.log("kys")  
+function XMLParserEntry(){  
     // let source = fs.readFileSync('foo.txt','utf8'); //source of XML file - will be  dynamic later
     // let data = ReadXML(source);
     // const rootids = FindRootNode(data);
