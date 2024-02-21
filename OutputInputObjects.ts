@@ -1,18 +1,20 @@
 import * as fs from 'fs'
 
 class Output {
-    private numberOfConcepts: number = 0;
-    //(replace)private numberOfTriples: number;
     private concepts: string[];
-    //(replace)private triple: ;
+    private triple: number[][];
     private context: boolean[][];
-    //(not used till triples are replaced)private relationLabels: ;
-    //(not used till triples are replaced)private RELATION: ;
-    //(not used till triples are replaced)private SOURCE: ;
+    private numberOfConcepts: number = 0;
+    private numberOfTriples: number = 0;
+    private relationLabels: string[];
+    private RELATION: number = 1;
+    private SOURCE: number = 0;
 
-    constructor(concepts: string[], context: boolean[][]) {
+    constructor(concepts: string[], context: boolean[][], triple: number[][], relationLables: string[]) {
         this.concepts = concepts;
         this.context = context; // Not sure if this is best way to set context???
+        this.triple = triple;
+        this.relationLabels = relationLables; // Not sure if this is best way to set relationLabels??
     }
 
     private setNumberOfConcepts(){
@@ -21,26 +23,33 @@ class Output {
         });
     }
 
+    private setNumberOfTriples(){
+        this.triple.forEach(() =>{ // Loop through triples
+            this.numberOfTriples++; // Count number of triples
+        });
+    }
+
     public output_cxt_file(cfname:string): void {  //Just makes cxt file dont need to change much exept global variables
         this.setNumberOfConcepts();
+        this.setNumberOfTriples();
         fs.writeFileSync(cfname, "B\n\n");
-        fs.appendFileSync(cfname, this.numberOfConcepts + "\n");
-        //(replace)fs.appendFileSync(this.cfname, gb.numtriples + "\n\n");
+        fs.appendFileSync(cfname, this.numberOfConcepts + "\n"); 
+        fs.appendFileSync(cfname, this.numberOfTriples + "\n\n");
         for(let i: number = 0; i < this.numberOfConcepts; i++){
             fs.appendFileSync(cfname, this.concepts[i] + "\n");
         }
-        //(replace)for(let j: number = 0; j < gb.numtriples; j++){
-        //    fs.appendFileSync(this.cfname, gb.concepts[gb.triple[j][gb.SOURCE]] + " " + gb.relation_labels[gb.triple[j][gb.RELATION]] + "\n");
-        //}
+        for(let j: number = 0; j < this.numberOfTriples; j++){
+            fs.appendFileSync(cfname, this.concepts[this.triple[j][this.SOURCE]] + " " + this.relationLabels[this.triple[j][this.RELATION]] + "\n");
+        }
         for(let i: number = 0; i < this.numberOfConcepts; i++){
-            //(replace)for(let j: number = 0; j < gb.numtriples; j++){
+            for(let j: number = 0; j < this.numberOfTriples; j++){
                 if(this.context[i]){
                     fs.appendFileSync(cfname, "X");
                 }
                 else {
                     fs.appendFileSync(cfname, "\n");
                 }
-            //}
+            }
         }
     }
         
