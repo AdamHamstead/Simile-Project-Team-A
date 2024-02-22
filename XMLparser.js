@@ -14,9 +14,9 @@ function XMLParserEntry(){
     let roots = [];
     let output;
     rootids.forEach(element => {
-        output = roots.push(CreateConcept(element,data));
+        roots.push(CreateConcept(element,data));
     });
-    return output
+    return roots
 }
 
 function ReadXML(source){
@@ -60,7 +60,11 @@ function CreateConcept(id ,data){
     });
     return node;
 }
-function CreateRelation(source,mxCell,data){ return new Relation(source,CreateConcept(mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)),data) ,mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)));} //your guess is as good as mine
+function CreateRelation(source,mxCell,data){
+    
+    new Relation(source,CreateConcept(mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)),data) ,mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)));//your guess is as good as mine
+    source.AddRelation(new Relation(source,CreateConcept(mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)),data) ,mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1))));//your guess is as good as mine
+} 
 
 function SearchForValue (str, strArray) {
     for (var j=0; j<strArray.length; j++) {
