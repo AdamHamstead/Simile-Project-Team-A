@@ -1,48 +1,45 @@
 import * as fs from 'fs'
 
 class Output {
-    private concepts: string[];
-    private triple: number[][];
-    private context: boolean[][];
-    private numberOfConcepts: number = 0;
-    private numberOfTriples: number = 0;
-    private relationLabels: string[];
-    private RELATION: number = 1;
-    private SOURCE: number = 0;
 
-    constructor(concepts: string[], context: boolean[][], triple: number[][], relationLables: string[]) {
+    constructor(concepts, context, triple, relationLables) {
         this.concepts = concepts;
         this.context = context; // Not sure if this is best way to set context???
         this.triple = triple;
         this.relationLabels = relationLables; // Not sure if this is best way to set relationLabels??
     }
 
-    private setNumberOfConcepts(){
+    numberOfTriples = 0;
+    numberOfConcepts = 0;
+    SOURCE = 0;
+    RELATION = 1;
+
+    setNumberOfConcepts(){
         this.concepts.forEach(() =>{ // Loop through concepts
             this.numberOfConcepts++; // Count number of concepts
         });
     }
 
-    private setNumberOfTriples(){
+    setNumberOfTriples(){
         this.triple.forEach(() =>{ // Loop through triples
             this.numberOfTriples++; // Count number of triples
         });
     }
 
-    public output_cxt_file(cfname:string): void {  //Just makes cxt file dont need to change much exept global variables
+    output_cxt_file(cfname) {  //Just makes cxt file dont need to change much exept global variables
         this.setNumberOfConcepts();
         this.setNumberOfTriples();
         fs.writeFileSync(cfname, "B\n\n");
         fs.appendFileSync(cfname, this.numberOfConcepts + "\n"); 
         fs.appendFileSync(cfname, this.numberOfTriples + "\n\n");
-        for(let i: number = 0; i < this.numberOfConcepts; i++){
+        for(let i = 0; i < this.numberOfConcepts; i++){
             fs.appendFileSync(cfname, this.concepts[i] + "\n");
         }
-        for(let j: number = 0; j < this.numberOfTriples; j++){
+        for(let j = 0; j < this.numberOfTriples; j++){
             fs.appendFileSync(cfname, this.concepts[this.triple[j][this.SOURCE]] + " " + this.relationLabels[this.triple[j][this.RELATION]] + "\n");
         }
-        for(let i: number = 0; i < this.numberOfConcepts; i++){
-            for(let j: number = 0; j < this.numberOfTriples; j++){
+        for(let i = 0; i < this.numberOfConcepts; i++){
+            for(let j = 0; j < this.numberOfTriples; j++){
                 if(this.context[i]){
                     fs.appendFileSync(cfname, "X");
                 }
@@ -55,23 +52,28 @@ class Output {
         
 }
 
-class Input {
-    //(not used till triples are replaced)private source: string = "";
-    //(not used till triples are replaced)private relation: string = "";
-    //(not used till triples are replaced)private target: string = "";
-    //(replace, if not change name to something else)private tripleThing: string[] = [];
-    private n: number = 0;
-    private a: string = "";
-    private escaped: boolean = false;
-    private delim: string = "";
-    private input: string = ",";//TEMP
+class Input { // Needs to work for XML
+
+    constructor(){
+
+    }
+
+    source = "";
+    relation = "";
+    target = "";
+    tripleThing = [];
+    n = 0;
+    a = "";
+    escaped = false;
+    delim = "";
+    input = ",";//TEMP
     //private input: string = prompt("\nEnter delimiter character (enter t if delimiter is the tab character, enter s if delimiter is the space character):")
 
-    public getInput(){
+    getInput(){
         return this.input;
     }
 
-    public inputCsvFile(fname: string) {
+    inputXmlFile(fname) {
 
         if (!fs.existsSync(fname)) {
             console.log("File does not exist!")
@@ -88,7 +90,7 @@ class Input {
             
             this.n = 0
             this.escaped = false
-            //this.tripleThing = ["","",""]
+            this.tripleThing = ["","",""]
             
             for (let char = 0; char < line.length; char++){
                 this.a = line[char]
@@ -104,19 +106,19 @@ class Input {
                             this.n++
                         }
                         else {
-                           // tripleThing[n] = tripleThing[n] + a
+                            this.tripleThing[n] = this.tripleThing[n] + a
                         }
                     }
     
                 }
             }
     
-            //source = tripleThing[0]
-            //relation = tripleThing[1];
-            //target = tripleThing[2];
+            source = tripleThing[0]
+            relation = tripleThing[1];
+            target = tripleThing[2];
     
             // create triples //
-            /*let pos = conceptRelation.find_concept(source)
+            let pos = conceptRelation.find_concept(source)
             if (pos == -1){
                 // add new concept to list
                 pos = gb.numconcepts
@@ -144,7 +146,7 @@ class Input {
                 //gb.concepts[gb.numconcepts] = target
             }
             gb.setnumtriples(gb.numtriples + 1);
-            gb.triple[gb.numtriples][2] = pos*/
+            gb.triple[gb.numtriples][2] = pos
         }
     }
 }
