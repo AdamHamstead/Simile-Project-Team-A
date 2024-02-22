@@ -1,5 +1,8 @@
 {
-    "files.associations": {
-        "iosfwd": "cpp"
-    }
-}
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript"
+    ]
+  }
+  
