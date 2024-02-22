@@ -91,7 +91,7 @@ class Triples{
             let target = this.triple[attribute][this.TARGET];
             let relation = this.triple[attribute][this.RELATION];
             let source = this.triple[attribute][this.SOURCE];
-            add_binary(attribute, source, relation, target, path, pathSize, rfname);
+            add_binary(attribute, source, relation, target, path, pathSize, rfname);//Add to binary not sorted yet
         }
     
         //output repeats
@@ -105,5 +105,7 @@ class Triples{
             fs.appendFileSync(rfname, "\n\n " + times + " direct pathways from \"" + this.concepts[source] + " - " + this.relationLabels[relation] + " - " + this.concepts[target] + "\" to \"" + this.concepts[output] + "\"");
         }
     }
+
+    //Add to binary
     
 }

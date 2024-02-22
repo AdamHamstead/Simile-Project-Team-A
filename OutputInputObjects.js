@@ -69,11 +69,11 @@ class Input { // Needs to work for XML
     input = ",";//TEMP
     //private input: string = prompt("\nEnter delimiter character (enter t if delimiter is the tab character, enter s if delimiter is the space character):")
 
-    getInput(){
+    get input(){
         return this.input;
     }
 
-    inputXmlFile(fname) {
+    inputCsvFile(fname) {
 
         if (!fs.existsSync(fname)) {
             console.log("File does not exist!")
