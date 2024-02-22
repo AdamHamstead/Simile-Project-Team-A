@@ -12,15 +12,17 @@ function XMLParserEntry(){
     
     const rootids = FindRootNode(data);
     let roots = [];
+    let output;
     rootids.forEach(element => {
-        roots.push(CreateConcept(element,data));
+        output = roots.push(CreateConcept(element,data));
     });
+    return output
 }
 
 function ReadXML(source){
     let usefulData = [];
-    fs.readFileSync(source,"utf-8");
-    const words = source.split('/n'); //splits the text on new line
+    let data = fs.readFileSync(source).toString()
+    const words = data.split('\n'); //splits the text on new line
     words.forEach(element => {
         if(element.includes("mxCell")&&element.includes("value")){
             usefulData.push(element);
@@ -33,10 +35,12 @@ function FindRootNode(data){
     let IDs=[];
     let targets=[];
     data.forEach(element => {
-        IDs.push(element.slice(element.indexOf('"'), element.indexOf('"',element.indexOf('"')+2))); 
         //Pushes the text inside the ID tag of the MXcell to IDs - does this by slicing between the index of the first and second " found 
         if(element.includes('target="')){
-            targets.push(element.slice(element.lastIndexOf('target="'), element.indexOf('"',element.lastIndexOf('target="')+2)));
+            targets.push(element.slice(element.lastIndexOf('target="')+8, element.indexOf('"',element.lastIndexOf('target="')+10)));
+        }
+        else {
+            IDs.push(element.slice(element.indexOf('"')+1, element.indexOf('"',element.indexOf('"')+2))); 
         }
     });
     return IDs.filter((element) => !targets.includes(element));
@@ -54,19 +58,10 @@ function CreateConcept(id ,data){
 
         }
     });
-    if(!endnode){
-        return node;
-    }
+    return node;
 }
-function CreateRelation(source,mxCell,data){
-    //mxcell is target
-    //need value 
-    //create the target if id does not exists
-    mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1));//gets value 
-    let target = CreateConcept(mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)),data);
-    let relation = new Relation(source,target ,mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)));
-    return 1;
-}
+function CreateRelation(source,mxCell,data){ return new Relation(source,CreateConcept(mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)),data) ,mxCell.slice(mxCell.lastIndexOf('value="'), mxCell.indexOf('"',mxCell.lastIndexOf('value="')+1)));} //your guess is as good as mine
+
 function SearchForValue (str, strArray) {
     for (var j=0; j<strArray.length; j++) {
         if (strArray[j].match(str)) break;
