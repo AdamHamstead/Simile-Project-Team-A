@@ -26,7 +26,13 @@ export class Concept
 
     AddRelation(relation)
     {
-        this.relations.push(relation);
+        this.relationsnew.push(relation);
+    }
+
+    isRelationsEmpty()
+    {
+        if(this.relationsnew.length = 0) return true 
+        else return false
     }
     
     getValue()
@@ -34,23 +40,46 @@ export class Concept
         return this.value;
     }
 
-    searchForTarget(value)
+    searchEntry()
     {
-        this.relations.forEach(element => //loop through all relations 
+        let path = [[]]
+        let tempPath = []
+        this.searchForTarget(this.value, path, tempPath)
+    }
+
+    searchForTarget(sourceValue, path, tempPath) //# = cycle, | = direct path
+    {
+        this.relationsnew.forEach(element => //loop through all relations 
         {
-            if(element.getTarget().getValue() == value) //gets the value of the target at that relation
+            tempPath.push(element.getSource().getValue());
+
+            if(element.getTarget().getValue() == sourceValue) //checks for cycles (if originalValue is the same as the value were on)
             {
-                return element.getTarget() //if value matches, returns that target
+                tempPath.push("|")
+                path.push(tempPath);
+                tempPath.pop();
+                path.push(tempPath);
+                tempPath = [];
+            }
+            else if (element.isRelationsEmpty()) //checks for an output node as it wont have any connections
+            {
+                //depth search - have 2d array, at splits just get to the end of one and copy to next array 
+                //then remove the ones til the split and then add the new ones to the end of that array 
+                tempPath.push("#")
+                path.push(tempPath);
+                tempPath.pop();
+                path.push(tempPath);
+                tempPath = [];
             }
             else
             {
-                element.getTarget().searchForTarget(value); 
-                //else calls the function on the target
+                //should run searchfortarget recursively to find either direct paths or for loops
+                element.getTarget().searchForTarget(sourceValue);
+                path.slice(-1).pop(); //pops off already visited nodes. Makes sure nodes aren't visited twice.
             }
         });
     }
 }
-
 export class Relation
 {
     value;
@@ -79,4 +108,3 @@ export class Relation
         return this.source
     }
 }
-

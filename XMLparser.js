@@ -5,11 +5,11 @@ import * as fs from 'fs';
 import { Concept } from './ConceptObjects.js';
 import { Relation } from "./ConceptObjects.js";
 
-console.log("hello world")
 XMLParserEntry();
 function XMLParserEntry(){  
     let source = "CatOnMat.xml"; //source of XML file - will be  dynamic later
     let data = ReadXML(source);
+    
     const rootids = FindRootNode(data);
     let roots = [];
     rootids.forEach(element => {
@@ -19,6 +19,7 @@ function XMLParserEntry(){
 
 function ReadXML(source){
     let usefulData = [];
+    fs.readFileSync(source,"utf-8");
     const words = source.split('/n'); //splits the text on new line
     words.forEach(element => {
         if(element.includes("mxCell")&&element.includes("value")){
