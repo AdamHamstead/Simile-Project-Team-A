@@ -18,6 +18,7 @@ export class Concept
 {
     value;
     relationsnew = Array();
+    visited = false;
 
     constructor(value)
     {
@@ -34,48 +35,55 @@ export class Concept
         if(this.relationsnew.length = 0) return true 
         else return false
     }
-    
-    getValue()
+
+    getVisited()
     {
-        return this.value;
+        return this.visited;
+    }
+
+    setVisited()
+    {
+        this.visited = !this.visited;
     }
 
     searchEntry()
     {
         let path = [[]]
         let tempPath = []
-        this.searchForTarget(this.value, path, tempPath)
+        this.searchForCycleAndDirectPath(path, tempPath)
     }
 
-    searchForTarget(sourceValue, path, tempPath) //# = cycle, | = direct path
+    searchForCycleAndDirectPath(path, tempPath) //
     {
         this.relationsnew.forEach(element => //loop through all relations 
         {
-            tempPath.push(element.getSource().getValue());
+            this.setVisited() //changes visited 
 
-            if(element.getTarget().getValue() == sourceValue) //checks for cycles (if originalValue is the same as the value were on)
+            if(element.getTarget().getVisited()) //checks for cycles 
             {
-                tempPath.push("|")
-                path.push(tempPath);
-                tempPath.pop();
-                path.push(tempPath);
-                tempPath = [];
+                this.setVisited();
+                tempPath.push("Cycle:");
+                return element.getTarget().getValue();
             }
-            else if (element.isRelationsEmpty()) //checks for an output node as it wont have any connections
+            else if (element.getTarget().isRelationsEmpty()) //checks for an output node as it wont have any connections
             {
                 //depth search - have 2d array, at splits just get to the end of one and copy to next array 
-                //then remove the ones til the split and then add the new ones to the end of that array 
-                tempPath.push("#")
-                path.push(tempPath);
-                tempPath.pop();
-                path.push(tempPath);
-                tempPath = [];
+                //then remove the ones til the split and then add the new ones to the end of that array
+                this.setVisited();
+                tempPath.push("Direct Path:")
+                return;
             }
             else
             {
-                //should run searchfortarget recursively to find either direct paths or for loops
-                element.getTarget().searchForTarget(sourceValue);
-                path.slice(-1).pop(); //pops off already visited nodes. Makes sure nodes aren't visited twice.
+                let value = element.getTarget().searchForCycleAndDirectPath();
+                if(this.value == value)
+                {
+                    return;
+                }
+                else
+                {
+                    tempPath.push(this.value);
+                }
             }
         });
     }
@@ -101,10 +109,5 @@ export class Relation
     getTarget()
     {
         return this.target;
-    }
-
-    getSource()
-    {
-        return this.source
     }
 }
