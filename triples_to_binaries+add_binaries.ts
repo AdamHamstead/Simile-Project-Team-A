@@ -1,60 +1,38 @@
-let RELATION = 1;		//relation index of triple
-let TARGET = 2;		//target concept index of triple
-let ATTRIBUTE = 0;
-let TIMES = 0;
-let OBJECT = 0;
-let SOURCE = 0;
-let numReps = 2;
-let repeats: number[][] = [];
-let cyclepaths: number[][] = [];
-let cpathsizes: number[] = [];
-let numcpaths = 0; 
+import * as gb from './GlobalVariables'
 
 
-let triple: number[][] = [];
 
-
-let numtriples:number = 0;	
-let relation_labels: string[1000];
-
-
-let MAX_ROWS = 1000;
-let MAX_COLS = 1000;
-//bool context[MAX_ROWS][MAX_COLS];
-let context: boolean[][];
-let concepts: string[];	//FCA formal object name = GC Target Concept
-
-
+import * as f from "./Line661-732 Functions"
 import * as fs from 'fs'; //File reading and writing
 
-let fname:string = "Triples to Binaries Report for InputFile.txt"
 
-//triples_to_binaries();
-function triples_to_binaries(){
-    let path:number[][] = []; //to record each transitive path through triples
+
+export function triples_to_binaries(rfname:string){
+    let path: number[][] = Array.from(Array(100000), () => new Array(2).fill(0));
+    //let path:number[100000][]; //to record each transitive path through triples
     let pathSize:number = 0;
 
 	//converts (source,relation,target) triples to ((source^relation),target) binary relations
-    for(let attribute:number = 0; attribute<numtriples; attribute++){
-        let target:number = triple[attribute][TARGET];
-        let relation:number = triple[attribute][RELATION];
-        let source = triple[attribute][SOURCE];
-        add_binary(attribute, source, relation, target, path, pathSize);
+    for(let attribute:number = 0; attribute<gb.numtriples; attribute++){
+        let target:number = gb.triple[attribute][gb.TARGET];
+        let relation:number = gb.triple[attribute][gb.RELATION];
+        let source:number = gb.triple[attribute][gb.SOURCE];
+        add_binary(attribute, source, relation, target, path, pathSize, rfname);
     }
 
     //output repeats
-    for(let i:number = 0; i<numReps; i++){
-        let source:number = triple[repeats[i][ATTRIBUTE]][SOURCE];
-        let relation:number = triple[repeats[i][ATTRIBUTE]][RELATION];
-        let output:number = repeats[i][OBJECT];
-        let target:number = triple[repeats[i][ATTRIBUTE]][TARGET];
-        let times:number = repeats[i][TIMES] + 1;
-        console.log("\n\n" + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
-        fs.writeFileSync(fname, "\n\n " + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
+    for(let i:number = 0; i<gb.numReps; i++){
+        let source:number = gb.triple[gb.repeats[i][gb.ATTRIBUTE]][gb.SOURCE];
+        let relation:number = gb.triple[gb.repeats[i][gb.ATTRIBUTE]][gb.RELATION];
+        let output:number = gb.repeats[i][gb.OBJECT];
+        let target:number = gb.triple[gb.repeats[i][gb.ATTRIBUTE]][gb.TARGET];
+        let times:number = gb.repeats[i][gb.TIMES] + 1;
+        console.log("\n\n" + times + " direct pathways from \"" + gb.concepts[source] + " - " + gb.relation_labels[relation] + " - " + gb.concepts[target] + "\" to \"" + gb.concepts[output] + "\"");
+        fs.appendFileSync(rfname, "\n\n " + times + " direct pathways from \"" + gb.concepts[source] + " - " + gb.relation_labels[relation] + " - " + gb.concepts[target] + "\" to \"" + gb.concepts[output] + "\"");
     }
 }
 
-function add_binary(attribute:number, source:number, relation:number, target:number, path:number[][], pathSize:number){
+function add_binary(attribute:number, source:number, relation:number, target:number, path:number[][], pathSize:number, rfname:string){
 
 	//add source and relation to current pathway
     path[pathSize][0] = source;
@@ -62,49 +40,56 @@ function add_binary(attribute:number, source:number, relation:number, target:num
     pathSize++;
 
     //repeated output targets
-    if(context[target][attribute] == true){
-        if(repeat_is_not_in_a_cycle(target, triple[attribute][SOURCE])){
-            if(is_output(target) && is_input(attribute)){
-                add_to_repeats(target, attribute);
+    if(gb.context[target][attribute] == true){
+        if(f.repeat_is_not_in_a_cycle(target, gb.triple[attribute][gb.SOURCE])){
+            if(f.is_output(target) && f.is_input(attribute)){
+                f.add_to_repeats(target, attribute);
             }
         }
     }
     else{
         //add a cross in the formal context for the attribute and target (object)
-        context[target][attribute] = true;
+        gb.context[target][attribute] = true;
+
+
+        console.log(gb.relation_labels[path[0][1]]);
+        console.log(gb.relation_labels[path[1][1]]);
+        console.log(gb.relation_labels[path[2][1]]);
+
 
         //if object is an output and attribute involves an input then report pathway
-        if(is_output(target) && is_input(attribute)){
+        if(f.is_output(target) && f.is_input(attribute)){
             console.log("\n\nDirect Pathway: ");
-            fs.writeFileSync(fname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
+            fs.appendFileSync(rfname, "\n\nDirect Pathway: ");
             for (let p = 0; p < pathSize; p++){
-                console.log(concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
-                fs.writeFileSync(fname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
+                console.log(gb.concepts[path[p][0]] + " - " + gb.relation_labels[path[p][1]] + " - ");
+                fs.appendFileSync(rfname, gb.concepts[path[p][0]] + " - " + gb.relation_labels[path[p][1]] + " - ");
             }
-            console.log(concepts[target]);
-            fs.writeFileSync(fname, concepts[target]);
+            console.log(gb.concepts[target]);
+            fs.appendFileSync(rfname, gb.concepts[target]);
         }
 
-        if (triple[attribute][SOURCE] == target){ //if source is its own target, its a cycle!
-            if (is_new_cycle(path, pathSize)){
-                cpathsizes[numcpaths] = pathSize;
+        if (gb.triple[attribute][gb.SOURCE] == target){ //if source is its own target, its a cycle!
+            if (f.is_new_cycle(path, pathSize)){
+                gb.cpathsizes[gb.numcpaths] = pathSize;
                 console.log("\n\nCycle: ");
-                fs.writeFileSync(fname, "\n\nCycle: ");
+                fs.appendFileSync(rfname, "\n\nCycle: ");
                 for (let p = 0; p<pathSize; p++){
-                    console.log(concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
-                    fs.writeFileSync(fname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
-                    cyclepaths[numcpaths][p] = path[p][0];
+                    console.log(gb.concepts[path[p][0]] + " - " + gb.relation_labels[path[p][1]] + " - ");
+                    fs.appendFileSync(rfname, gb.concepts[path[p][0]] + " - " + gb.relation_labels[path[p][1]] + " - ");
+                    gb.cyclePaths[gb.numcpaths][p] = path[p][0];
                 }
-                console.log(concepts[path[0][0]]);
-                fs.writeFileSync(fname, concepts[path[0][0]]);
-                numcpaths++;
+                console.log(gb.concepts[path[0][0]]);
+                fs.appendFileSync(rfname, gb.concepts[path[0][0]]);
+                gb.setnumcpaths(gb.numcpaths + 1)
+                //numcpaths++;
             }
         }
 
-        if(!target_already_in_pathway(target, path, pathSize)){
-            for (let k = 0; k<numtriples; k++) {
-                if(target == triple[k][SOURCE]){
-                    add_binary(attribute, triple[k][SOURCE], triple[k][RELATION], triple[k][TARGET], path, pathSize);
+        if(!f.target_already_in_pathway(target, path, pathSize)){
+            for (let k = 0; k<gb.numtriples; k++) {
+                if(target == gb.triple[k][gb.SOURCE]){
+                    add_binary(attribute, gb.triple[k][gb.SOURCE], gb.triple[k][gb.RELATION], gb.triple[k][gb.TARGET], path, pathSize, rfname);
                 }
             }
         }

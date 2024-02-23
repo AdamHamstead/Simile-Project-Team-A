@@ -1,5 +1,9 @@
 {
     "files.associations": {
+<<<<<<< HEAD
+        "*.embeddedhtml": "html",
+=======
+>>>>>>> 74a57983874572d7c36462e098715bbdeb3a74d0
         "iosfwd": "cpp"
     }
 }

@@ -1,7 +1,5 @@
-let numconcepts=0;
-let referents;	//CG Concept labels in cgif file
-let concepts;	//FCA formal object name = GC Target Concept
-
+// ONLY USED FOR CGIF - NOT NEEDED //
+/*
 function extractCGconceptTypeLabelandReferent(type_and_referent){
 
 	let startofreferent = type_and_referent.find(":", 0);
@@ -95,3 +93,4 @@ function searchforreferent(referent)
 	}
 	return pos;
 }
+*/

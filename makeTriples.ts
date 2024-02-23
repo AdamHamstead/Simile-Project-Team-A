@@ -1,8 +1,4 @@
-let numconcepts: number;
-let referents: number;
-let numtriples: number;
-
-let triple: { SourceConcept: number; Relation: number; TargetConcept: number; }[]
+import * as gb from './GlobalVariables'
 
 function makeTriples(rel: number, ref_list: string): void {
 
@@ -15,7 +11,7 @@ function makeTriples(rel: number, ref_list: string): void {
 		}
 		else { // space indicates end of a referent - find the corresponding cg source concept
 			for(let j = 0; j < numconcepts; j++) {
-				if(referents[j] == referent) {
+				if(gb.referents[j] == referent) {
 					let k: number;
 					// check for a repeated source concept
 					for(k = 0; k < numSourceConcInRelation; k++) {
@@ -35,18 +31,16 @@ function makeTriples(rel: number, ref_list: string): void {
 
 	let targetConceptIndex
 	for(let j = 0; j < numconcepts; j++) {
-		if(referents[j] == referent) {
+		if(gb.referents[j] == referent) {
 			targetConceptIndex = j
 			break
 		}
 	}
 
 	for(let i = 0; i < numSourceConcInRelation; i++) {
-		triple[numtriples] = {
-			"SourceConcept": sourceConceptIndex[i], 
-			"Relation": rel,
-			"TargetConcept": targetConceptIndex
-		}
-		numtriples++;
+		gb.triple[gb.numtriples][gb.SOURCE]=sourceConceptIndex[i]
+		gb.triple[gb.numtriples][gb.RELATION]=rel
+		gb.triple[gb.numtriples][gb.TARGET]=targetConceptIndex
+		gb.numtriples++;
 	}
 }
