@@ -52,11 +52,6 @@ function add_binary(attribute:number, source:number, relation:number, target:num
         gb.context[target][attribute] = true;
 
 
-        console.log(gb.relation_labels[path[0][1]]);
-        console.log(gb.relation_labels[path[1][1]]);
-        console.log(gb.relation_labels[path[2][1]]);
-
-
         //if object is an output and attribute involves an input then report pathway
         if(f.is_output(target) && f.is_input(attribute)){
             console.log("\n\nDirect Pathway: ");
