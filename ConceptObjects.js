@@ -14,6 +14,7 @@
     replace most helper functions and global variables (but it wont get them all).
 
 */
+
 export class Concept
 {
     value;
