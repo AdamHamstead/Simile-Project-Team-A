@@ -82,10 +82,23 @@ var setnumber_of_relations = setnumber_of_relations;
 var reporttxt = "";
 var ctxreport = "";
 
-var fname = "buissines." //set this to file name *
+var fname = "" //set this to file name *
 export async function run() {
     await Excel.run(async (context) => {
 
+
+
+        var title = Office.context.document.url
+        var last;
+        for (var i = 0; i < title.length; i++){ //remove path name and only keep file name
+            if (title[i] == "/"){
+                last = i;
+            } 
+        }
+
+        title = title.substring(last + 1);  
+
+        fname = title;
 
         const file = context.workbook.getSelectedRange();
 
