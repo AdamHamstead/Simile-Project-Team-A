@@ -79,10 +79,10 @@ var setnumber_of_relations = setnumber_of_relations;
 //import * as fs from 'fs';
 
 
+var reporttxt = "";
+var ctxreport = "";
 
-
-
-var fname = "buissines."
+var fname = "buissines." //set this to file name *
 export async function run() {
     await Excel.run(async (context) => {
 
@@ -107,21 +107,27 @@ export async function run() {
         //input_csv_file(fname, fileData)
         
         //CGFCA CODE
-        var reporttxt = [fileData.length];
+        //var reporttxt = [fileData.length];
 
-        reporttxt[0] = ("Triples to Binaries Report for " + fname + "\n\n");
-        reporttxt[1] = ("Force#1--")
+        reporttxt += ("Triples to Binaries Report for " + fname + "\n\n" + "\n");
 
-        reporttxt = input_csv_file(fileData) //get data into array thing
 
         var pos = fname.indexOf(".");
         var rfname = fname.substring(0, pos);
         rfname += "_report.txt";
 
+        var cfname = fname.substring(0, pos) + ".cxt";
 
+
+        input_csv_file(fileData) //get data into array thing
+
+        reportInputAndOuputConcepts();
+        triples_to_binaries();
+        output_cxt_file();
 
     
         download(reporttxt, rfname, 'text/plain');
+        download(ctxreport, cfname, 'text/plain');
 
       
     
@@ -147,13 +153,8 @@ export async function download(strData, strFileName, strMimeType) {
         t = A[2] || "text/plain";
 
     //build download link:
-    var text;
-    for(var i = 0; i < strData.length; i++){
-        text += strData[i] + "\n"
-        console.log(text);
-        console.log("Text");
-    }
-    a.href = "data:" + strMimeType + "charset=utf-8," + escape(text);
+    
+    a.href = "data:" + strMimeType + "charset=utf-8," + escape(strData);
 
 
     if (window.MSBlobBuilder) { // IE10
@@ -193,7 +194,7 @@ export async function input_csv_file(fileData) {
     //}
 
 
-
+    var pos;
     var source;
     var relation;
     var target;
@@ -244,7 +245,7 @@ export async function input_csv_file(fileData) {
             relation = tripleThing[1];
             target = tripleThing[2];
             // create triples //
-            var pos = find_concept(source);
+            pos = find_concept(source);
             if (pos == -1) {
                 // add new concept to list
                 pos = numconcepts;
@@ -283,7 +284,7 @@ export async function input_csv_file(fileData) {
   return (pos);
 }
 
-async function find_relation(relation){
+function find_relation(relation){
   var pos = -1;
   for (var i = 0; i < number_of_relations; i++) {
       if (relation == relation_labels[i]) {
@@ -294,7 +295,7 @@ async function find_relation(relation){
   return (pos);
 }
 
- function reportInputAndOuputConcepts(rfname){
+ function reportInputAndOuputConcepts(){
   for (var i = 0; i < numconcepts; i++) {
     var j = 0;
     for (j = 0; j < numtriples; j++) {
@@ -322,36 +323,36 @@ for (var i = 0; i < numconcepts; i++) {
 //report input concepts
 if (numInputs == 0) {
     console.log("\n\nThere are no inputs");
-    //fs.appendFileSync(rfname, "\n\nThere are no inputs");
+    reporttxt += ("\n\nThere are no inputs");
 }
 else {
     console.log("\n\nInputs: ");
-    //fs.appendFileSync(rfname, "\n\nInputs: ");
+    reporttxt += ("\n\nInputs: ");
     for (var i = 0; i < numInputs; i++) {
         console.log(input_concepts[i]);
         console.log(concepts[input_concepts[i]]);
         console.log(concepts[1]);
         console.log("\"" + concepts[input_concepts[i]] + "\" ");
-      //  fs.appendFileSync(rfname, '\"' + concepts[input_concepts[i]] + "\" ");
+      reporttxt += ('\"' + concepts[input_concepts[i]] + "\" ");
     }
 }
 //report output concepts
 if (numOutputs == 0) {
     console.log("\n\nThere are no outputs.");
-   // fs.appendFileSync(rfname, "\n\nThere are no outputs.");
+    reporttxt += ("\n\nThere are no outputs.");
 }
 else {
     console.log("\n\nOutputs: ");
-    //fs.appendFileSync(rfname, "\n\nOutputs: ");
+    reporttxt += ("\n\nOutputs: ");
     for (var i = 0; i < numOutputs; i++) {
         console.log('\"' + concepts[output_concepts[i]] + "\" ");
-      //  fs.appendFileSync(rfname, '\"' + concepts[output_concepts[i]] + "\" ");
+        reporttxt += ('\"' + concepts[output_concepts[i]] + "\" ");
     }
 }
 
 }
 
- function triples_to_binaries(rfname){
+ function triples_to_binaries(){
   var path = Array.from(Array(100000), function () { return new Array(2).fill(0); });
   //let path:number[100000][]; //to record each transitive path through triples
   var pathSize = 0;
@@ -360,7 +361,7 @@ else {
       var target = triple[attribute][TARGET];
       var relation = triple[attribute][RELATION];
       var source = triple[attribute][SOURCE];
-      add_binary(attribute, source, relation, target, path, pathSize, rfname);
+      add_binary(attribute, source, relation, target, path, pathSize);
   }
   //output repeats
   for (var i = 0; i < numReps; i++) {
@@ -370,11 +371,11 @@ else {
       var target = triple[repeats[i][ATTRIBUTE]][TARGET];
       var times = repeats[i][TIMES] + 1;
       console.log("\n\n" + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
-    //  fs.appendFileSync(rfname, "\n\n " + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
+      reporttxt += ("\n\n " + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
   }
 }
 
- function add_binary(attribute, source, relation, target, path, pathSize, rfname){
+ function add_binary(attribute, source, relation, target, path, pathSize){
   //add source and relation to current pathway
   path[pathSize][0] = source;
   path[pathSize][1] = relation;
@@ -397,33 +398,33 @@ else {
       //if object is an output and attribute involves an input then report pathway
       if (is_output(target) && is_input(attribute)) {
           console.log("\n\nDirect Pathway: ");
-       //   fs.appendFileSync(rfname, "\n\nDirect Pathway: ");
+          reporttxt += ("\n\nDirect Pathway: ");
           for (var p = 0; p < pathSize; p++) {
               console.log(concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
-            //  fs.appendFileSync(rfname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
+              reporttxt += (concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
           }
           console.log(concepts[target]);
-   //       fs.appendFileSync(rfname, concepts[target]);
+          reporttxt += (concepts[target]);
       }
       if (triple[attribute][SOURCE] == target) { //if source is its own target, its a cycle!
           if (is_new_cycle(path, pathSize)) {
               cpathsizes[numcpaths] = pathSize;
               console.log("\n\nCycle: ");
-      //        fs.appendFileSync(rfname, "\n\nCycle: ");
+              reporttxt += ("\n\nCycle: ");
               for (var p = 0; p < pathSize; p++) {
                   console.log(concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
-        //          fs.appendFileSync(rfname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
+                  reporttxt += (concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
                   cyclePaths[numcpaths][p] = path[p][0];
               }
               console.log(concepts[path[0][0]]);
-          //    fs.appendFileSync(rfname, concepts[path[0][0]]);
+              reporttxt += (concepts[path[0][0]]);
                numcpaths++;
           }
       }
       if (!target_already_in_pathway(target, path, pathSize)) {
           for (var k = 0; k < numtriples; k++) {
               if (target == triple[k][SOURCE]) {
-                  add_binary(attribute, triple[k][SOURCE], triple[k][RELATION], triple[k][TARGET], path, pathSize, rfname);
+                  add_binary(attribute, triple[k][SOURCE], triple[k][RELATION], triple[k][TARGET], path, pathSize);
               }
           }
       }
@@ -511,28 +512,26 @@ function is_new_cycle(path, pathsize) {
   return true;
 }
 
-function output_cxt_file(fname) {
-    var pos = fname.indexOf(".");
-    var cfname = fname.substring(0, pos) + ".cxt";
- //   fs.writeFileSync(cfname, "B\n\n");
-  //  fs.appendFileSync(cfname, numconcepts + "\n");
-   // fs.appendFileSync(cfname, numtriples + "\n\n");
+function output_cxt_file() {
+    ctxreport += ("B\n\n");
+    ctxreport += (numconcepts + "\n");
+    ctxreport += (numtriples + "\n\n");
     for (var i = 0; i < numconcepts; i++) {
-     //   fs.appendFileSync(cfname, concepts[i] + "\n");
+        ctxreport += (concepts[i] + "\n");
     }
     for (var j = 0; j < numtriples; j++) {
-       // fs.appendFileSync(cfname, concepts[triple[j][SOURCE]] + " " + relation_labels[triple[j][RELATION]] + "\n");
+        ctxreport += (concepts[triple[j][SOURCE]] + " " + relation_labels[triple[j][RELATION]] + "\n");
     }
     for (var i = 0; i < numconcepts; i++) {
         for (var j = 0; j < numtriples; j++) {
             if (context[i][j]) {
-             //   fs.appendFileSync(cfname, "X");
+                ctxreport += ("X");
             }
             else {
-               // fs.appendFileSync(cfname, ".");
+                ctxreport += (".");
             }
         }
-        //fs.appendFileSync(cfname, "\n");
+        ctxreport += ("\n");
     }
 }
 
