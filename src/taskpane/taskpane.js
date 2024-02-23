@@ -91,7 +91,7 @@ export async function run() {
         var title = Office.context.document.url
         var last;
         for (var i = 0; i < title.length; i++){ //remove path name and only keep file name
-            if (title[i] == "/"){
+            if (title[i] == "\\" ){
                 last = i;
             } 
         }
