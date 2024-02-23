@@ -35,9 +35,7 @@ export function add_to_repeats(target: number, attribute: number){
 	let i:number = 0;
 	for(i = 0; i < gb.numReps; i++){
 		if(attribute == gb.repeats[i][gb.ATTRIBUTE] && target == gb.repeats[i][gb.OBJECT]){
-			console.log(gb.repeats[i][gb.TIMES])
 			gb.repeats[i][gb.TIMES]++;
-			console.log(gb.repeats[i][gb.TIMES])
 			break;
 		}
 	}

@@ -36,7 +36,6 @@ export let triple: number[][] = Array.from(Array(5000), () => new Array(3).fill(
 export let numtriples:number = 0;	
 
 export function setnumtriples(value:number){
-    console.log(numtriples);
     numtriples = value;
 }
 export let relation_labels: string[] = new Array(1000);

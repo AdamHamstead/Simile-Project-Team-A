@@ -38,9 +38,6 @@ export function reportInputAndOuputConcepts(rfname:string){ //Creates and writes
         console.log("\n\nInputs: ");
         fs.appendFileSync(rfname, "\n\nInputs: ")
 		for(let i:number = 0; i < gb.numInputs; i++){
-			console.log(gb.input_concepts[i])
-			console.log(gb.concepts[gb.input_concepts[i]]);
-			console.log(gb.concepts[1]);
             console.log("\"" + gb.concepts[gb.input_concepts[i]] + "\" ");
             fs.appendFileSync(rfname, '\"' + gb.concepts[gb.input_concepts[i]] + "\" ") 
 		}
