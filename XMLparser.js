@@ -93,6 +93,6 @@ function SearchForValue(str, strArray) {
 }
 function SearchForNode (str, strArray) {
     for (var j=0; j<strArray.length; j++) {
-        if (strArray[j].match(str)) return strArray[j];
+        if (strArray[j].match('id='+str)) return strArray[j];
     }
 }
