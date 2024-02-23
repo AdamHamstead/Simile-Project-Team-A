@@ -1,17 +1,13 @@
-
-//const Concept = await import("./ConceptObjects");
-//const Relation = await import("./ConceptObjects");
 import * as fs from 'fs';
 import { Concept } from './ConceptObjects.js';
 import { Relation } from "./ConceptObjects.js";
 
-XMLParserEntry();
-function XMLParserEntry(){  
-    let source = "CatOnMat.xml"; //source of XML file - will be  dynamic later
+// XMLParserEntry(); dont need this entry - called in main
+export function XMLParserEntry(source){
+    //source of XML file - will be  dynamic later
     let data = ReadXML(source);
-    
     const rootids = FindRootNode(data);
-    let container = [[],[]];
+    let container = [[],[]]; //first array is roots, second array is triples
     let output;
     let Concepts= new Array();
     rootids.forEach(element => {
@@ -20,13 +16,22 @@ function XMLParserEntry(){
     return container
 }
 
-function ReadXML(source){
+function ReadXML(source){ 
     let usefulData = [];
-    let data = fs.readFileSync(source).toString()
+    var data;
+    try
+    {
+        data = fs.readFileSync(source).toString();
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+     //Reads the XML file and then converts it into a string
     const words = data.split('\n'); //splits the text on new line
     words.forEach(element => {
         if(element.includes("mxCell")&&element.includes("value")){
-            usefulData.push(element);
+            usefulData.push(element); //finds all data that is an mxCell and has a value
         }  
     });
     return usefulData;
@@ -44,7 +49,7 @@ function FindRootNode(data){
             IDs.push(element.slice(element.indexOf('"')+1, element.indexOf('"',element.indexOf('"')+2))); 
         }
     });
-    return IDs.filter((element) => !targets.includes(element));
+    return IDs.filter((element) => !targets.includes(element)); //filters the array getting rid of all the repeated elements between arrays
 }
 
 function CreateConcept(id ,data,Concepts,container){
