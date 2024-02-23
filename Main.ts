@@ -39,5 +39,4 @@ function main(){
 
 	//while ( !_kbhit()); //_kbhit just checks for a keyboard input to close program
 }
-console.log("ENDED");
 process.exit();
