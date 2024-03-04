@@ -5,7 +5,7 @@ const prompt = promptSync();
 main()
 function main()
 {
-    var source = prompt('What is your filename');
+    var source = 'CatOnMat.xml';
     let container = [[],[]]
     container = XML.XMLParserEntry(source);
     binary.triplesToBinariesEntry(container);
