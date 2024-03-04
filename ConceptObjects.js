@@ -60,7 +60,7 @@ export class Concept
         {
             this.setVisited() //changes visited 
 
-            if(element.getTarget().getVisited()) //checks for cycles 
+            if((element[0].getTarget()).getVisited()) //checks for cycles 
             {
                 this.setVisited();
                 tempPath.push("Cycle:");

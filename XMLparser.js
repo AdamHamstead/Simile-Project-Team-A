@@ -80,7 +80,7 @@ function CreateRelation(source,mxCell,data,Concepts,container){
     });
     //source.AddRelation(new Relation(source,CreateConcept(mxCell.slice(mxCell.lastIndexOf('value="')+8, mxCell.indexOf('"',mxCell.lastIndexOf('value="')+9)),data) ,mxCell.slice(mxCell.lastIndexOf('value="')+8, mxCell.indexOf('"',mxCell.lastIndexOf('value="')+9))));//your guess is as good as mine - come to adam i will show you the amazing world of oneliners  
     //a relic of the past :)
-    container[1] = new Relation(source,value,data)
+    container[1] = new Relation(source,target,value)
     source.AddRelation(container.slice(-1));  
 }
 
