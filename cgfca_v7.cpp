@@ -544,7 +544,7 @@ void triples_to_binaries(){
 
 
 	//output repeats
-	for(int i = 0; i < numreps; i++){
+	for(int i = 0; i < numreps; i++){ //think repeats just counts how many times an output node has been reached. Knows how many direct paths to that output node
 		int source = triple[repeats[i][ATTRIBUTE]][SOURCE];
 		int relation = triple[repeats[i][ATTRIBUTE]][RELATION];
 		int output = repeats[i][OBJECT];
@@ -579,9 +579,9 @@ void add_binary(int attribute, int source, int relation, int target, int path[][
 
 	//repeated output targets
 	if (context[target][attribute] == true) {
-		if (repeat_is_not_in_a_cycle(target, triple[attribute][SOURCE])) {
-			if (is_output(target) && is_input(attribute)) {
-				add_to_repeats(target, attribute);
+		if (repeat_is_not_in_a_cycle(target, triple[attribute][SOURCE])) { //checks if the repeated binary is in a cycle
+			if (is_output(target) && is_input(attribute)) { //checks
+				add_to_repeats(target, attribute); //adds it to repeated binaries??
 			}
 		}
 	}

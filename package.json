@@ -1,0 +1,15 @@
+{
+  "name": "simile-project-team-a",
+  "version": "1.0.0",
+  "description": "The github repo for SHU PROFESSIONAL SOFTWARE PROJECTS Team A Simile Project",
+  "main": "ConceptObjects.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  }
+}
