@@ -72,17 +72,9 @@ export async function run() {
 
         var title = Office.context.document.url //gets entire file path
         var last;
-        var fileType = title.split(".").pop(); //gets file extension xlsx or csv
-        var check;
-        if (fileType == "xlsx"){ // .xlsx and .csv file have different file paths
-            check = "/"
-        }
-        else{
-            check = "\\";
-        }
 
         for (var i = 0; i < title.length; i++){ //remove path and only keep file name and extension
-            if (title[i] == check ){ 
+            if (title[i] == "/" || title[i] == "\\" ){ 
                 last = i;
             } 
         }
