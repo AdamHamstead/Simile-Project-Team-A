@@ -102,25 +102,12 @@ export async function run() {
 
         const file = context.workbook.getSelectedRange();
 
-        // Read the range address
         file.load("text");
-  
-        // Update the fill color
-        //range.format.fill.color = "yellow";
   
         await context.sync(); 
 
-        //var file = context.workbook.getSelectedRange()
-        //file.load("text");
-
-        //console.log(`The range address was ${file.text}.`);
 
         var fileData = file.text
-
-        //input_csv_file(fname, fileData)
-        
-        //CGFCA CODE
-        //var reporttxt = [fileData.length];
 
         reporttxt += ("Triples to Binaries Report for " + fname + "\n\n" + "\n");
 
@@ -140,18 +127,7 @@ export async function run() {
 
     
         download(reporttxt, rfname, 'text/plain');
-        download(ctxreport, cfname, 'text/plain');
-
-      
-    
-
-
-        //var report = new File(["foo"], rfname);
-     //   reportInputAndOuputConcepts(rfname)
-       // triples_to_binaries(rfname)
-        //output_cxt_file(fname)
-        //CGFCA CODE
-      
+        download(ctxreport, cfname, 'text/plain');      
     });
 
 }
@@ -201,11 +177,6 @@ return true;
 }
 
 export async function input_csv_file(fileData) {
-    //if (!fs.existsSync(fname)) {
-    //    console.log("File does not exist!");
-    //    process.exit();
-    //}
-
 
     var pos;
     var source;
@@ -226,7 +197,6 @@ export async function input_csv_file(fileData) {
     //var fileContent = fs.readFileSync(fname, 'utf8');
 
     for (var i = 0; i < fileData.length; i++){ //Loops through every row of data
-        //console.log(fileData[i]);
      
         var line = fileData[i].toString();
         if (line != '') {
