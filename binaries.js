@@ -5,7 +5,9 @@ import { Relation } from "./ConceptObjects.js";
 export function triplesToBinariesEntry(container)
 {
     container.forEach(element => {
-        element.searchEntry();
+        element.forEach(root => {
+            root.searchEntry();
+        });
     });
 
 }
