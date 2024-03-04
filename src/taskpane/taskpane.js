@@ -5,12 +5,6 @@
 
 /* global console, document, Excel, Office */
 
-
-//GLOBAL VARIABLES
-
-
-
-
 Office.onReady((info) => {
   if (info.host === Office.HostType.Excel) {
 
@@ -18,13 +12,8 @@ Office.onReady((info) => {
 
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
-
-   // document.getElementById("run").onclick = run;
   }
 });
-
-
-//Text Download
 
 
 var cpathsizes = [10000];
@@ -75,42 +64,45 @@ var setnumber_of_relations = setnumber_of_relations;
 
 //GLOABAL VARIABLES
 
-
-//import * as fs from 'fs';
-
-
 var reporttxt = "";
 var ctxreport = "";
 
-var fname = "" //set this to file name *
 export async function run() {
     await Excel.run(async (context) => {
 
-
-
-        var title = Office.context.document.url
+        var title = Office.context.document.url //gets entire file path
         var last;
-        for (var i = 0; i < title.length; i++){ //remove path name and only keep file name
-            if (title[i] == "\\" ){
-                last = i;
-            } 
+        var fileType = title.split(".").pop(); //gets file extension xlsx or csv
+        for (var i = 0; i < title.length; i++){ //remove path and only keep file name and extension
+            if (fileType == "xlsx"){
+                if (title[i] == "/" ){ // .xlsx and .csv file have different file paths
+                    last = i;
+                } 
+            }
+            else{
+                if (title[i] == "\\" ){
+                    last = i;
+                } 
+            }
         }
+    
+        var fname = title.substring(last + 1); 
 
-        title = title.substring(last + 1);  
+        let sheets = context.workbook.worksheets; //gets names of worksheets
+        sheets.load("items/name");
+    
+        await context.sync();
 
-        fname = title;
-
-        const file = context.workbook.getSelectedRange();
-
+        var sheetName;
+        sheets.items.forEach(function (sheet) { //Will cause issues if they have more than 1 sheet open
+            sheetName = sheet.name;
+        });
+    
+        let sheet = context.workbook.worksheets.getItem(sheetName);
+        let file = sheet.getUsedRange(); //gets all the text from the worksheet
         file.load("text");
-  
         await context.sync(); 
-
-
         var fileData = file.text
-
-        reporttxt += ("Triples to Binaries Report for " + fname + "\n\n" + "\n");
-
 
         var pos = fname.indexOf(".");
         var rfname = fname.substring(0, pos);
@@ -119,13 +111,15 @@ export async function run() {
         var cfname = fname.substring(0, pos) + ".cxt";
 
 
-        input_csv_file(fileData) //get data into array thing
+        reporttxt += ("Triples to Binaries Report for " + fname + "\n\n" + "\n");
 
+        input_csv_file(fileData) //Run through CGFCA code
         reportInputAndOuputConcepts();
         triples_to_binaries();
         output_cxt_file();
 
     
+        //download report and cxt file
         download(reporttxt, rfname, 'text/plain');
         download(ctxreport, cfname, 'text/plain');      
     });
@@ -165,15 +159,15 @@ export async function download(strData, strFileName, strMimeType) {
             D.body.removeChild(a);
         }, 66);
         return true;
-}
-//do iframe dataURL download: (older W3)
-var f = D.createElement("iframe");
-D.body.appendChild(f);
-f.src = "data:" + (A[2] ? A[2] : "application/octet-stream") + (window.btoa ? ";base64" : "") + "," + (window.btoa ? window.btoa : escape)(strData);
-setTimeout(function() {
-    D.body.removeChild(f);
-}, 333);
-return true;
+    }
+    //do iframe dataURL download: (older W3)
+    var f = D.createElement("iframe");
+    D.body.appendChild(f);
+    f.src = "data:" + (A[2] ? A[2] : "application/octet-stream") + (window.btoa ? ";base64" : "") + "," + (window.btoa ? window.btoa : escape)(strData);
+    setTimeout(function() {
+        D.body.removeChild(f);
+    }, 333);
+    return true;
 }
 
 export async function input_csv_file(fileData) {
