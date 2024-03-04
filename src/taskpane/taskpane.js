@@ -73,17 +73,18 @@ export async function run() {
         var title = Office.context.document.url //gets entire file path
         var last;
         var fileType = title.split(".").pop(); //gets file extension xlsx or csv
+        var check;
+        if (fileType == "xlsx"){ // .xlsx and .csv file have different file paths
+            check = "/"
+        }
+        else{
+            check = "\\";
+        }
+
         for (var i = 0; i < title.length; i++){ //remove path and only keep file name and extension
-            if (fileType == "xlsx"){
-                if (title[i] == "/" ){ // .xlsx and .csv file have different file paths
-                    last = i;
-                } 
-            }
-            else{
-                if (title[i] == "\\" ){
-                    last = i;
-                } 
-            }
+            if (title[i] == check ){ 
+                last = i;
+            } 
         }
     
         var fname = title.substring(last + 1); 
@@ -299,30 +300,21 @@ for (var i = 0; i < numconcepts; i++) {
 }
 //report input concepts
 if (numInputs == 0) {
-    console.log("\n\nThere are no inputs");
     reporttxt += ("\n\nThere are no inputs");
 }
 else {
-    console.log("\n\nInputs: ");
     reporttxt += ("\n\nInputs: ");
     for (var i = 0; i < numInputs; i++) {
-        console.log(input_concepts[i]);
-        console.log(concepts[input_concepts[i]]);
-        console.log(concepts[1]);
-        console.log("\"" + concepts[input_concepts[i]] + "\" ");
       reporttxt += ('\"' + concepts[input_concepts[i]] + "\" ");
     }
 }
 //report output concepts
 if (numOutputs == 0) {
-    console.log("\n\nThere are no outputs.");
     reporttxt += ("\n\nThere are no outputs.");
 }
 else {
-    console.log("\n\nOutputs: ");
     reporttxt += ("\n\nOutputs: ");
     for (var i = 0; i < numOutputs; i++) {
-        console.log('\"' + concepts[output_concepts[i]] + "\" ");
         reporttxt += ('\"' + concepts[output_concepts[i]] + "\" ");
     }
 }
@@ -347,7 +339,6 @@ else {
       var output = repeats[i][OBJECT];
       var target = triple[repeats[i][ATTRIBUTE]][TARGET];
       var times = repeats[i][TIMES] + 1;
-      console.log("\n\n" + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
       reporttxt += ("\n\n " + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
   }
 }
@@ -357,11 +348,7 @@ else {
   path[pathSize][0] = source;
   path[pathSize][1] = relation;
   pathSize++;
-  console.log(relation_labels[path[0][1]]);
-  console.log(relation_labels[path[1][1]]);
-  console.log(relation_labels[path[2][1]]);
   //repeated output targets
-  console.log(context[6][1]);
   if (context[target][attribute] == true) {
       if (repeat_is_not_in_a_cycle(target, triple[attribute][SOURCE])) {
           if (is_output(target) && is_input(attribute)) {
@@ -374,26 +361,20 @@ else {
       context[target][attribute] = true; //This line somhow gets executed out of order with the above this is somhow set to true and above is done before direct oathwat is done
       //if object is an output and attribute involves an input then report pathway
       if (is_output(target) && is_input(attribute)) {
-          console.log("\n\nDirect Pathway: ");
           reporttxt += ("\n\nDirect Pathway: ");
           for (var p = 0; p < pathSize; p++) {
-              console.log(concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
               reporttxt += (concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
           }
-          console.log(concepts[target]);
           reporttxt += (concepts[target]);
       }
       if (triple[attribute][SOURCE] == target) { //if source is its own target, its a cycle!
           if (is_new_cycle(path, pathSize)) {
               cpathsizes[numcpaths] = pathSize;
-              console.log("\n\nCycle: ");
               reporttxt += ("\n\nCycle: ");
               for (var p = 0; p < pathSize; p++) {
-                  console.log(concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
                   reporttxt += (concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
                   cyclePaths[numcpaths][p] = path[p][0];
               }
-              console.log(concepts[path[0][0]]);
               reporttxt += (concepts[path[0][0]]);
                numcpaths++;
           }
@@ -438,9 +419,7 @@ function add_to_repeats(target, attribute) {
   var i = 0;
   for (i = 0; i < numReps; i++) {
       if (attribute == repeats[i][ATTRIBUTE] && target == repeats[i][OBJECT]) {
-          console.log(repeats[i][TIMES]);
           repeats[i][TIMES]++;
-          console.log(repeats[i][TIMES]);
           break;
       }
   }
