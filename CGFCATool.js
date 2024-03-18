@@ -33,14 +33,11 @@ var cpathsizes = [10000];
     var setnumber_of_relations = setnumber_of_relations;
     //GLOABAL VARIABLES
 
-
-    //import * as fs from 'fs'
     const fs = require('fs');
-
 
     let fname;
     let rfname;
-
+    let fileExists = true;
 
 document.getElementById("CGFCA").addEventListener("click", myFunction);
 
@@ -49,16 +46,12 @@ var selectedFile;
 function myFunction(){
 
     selectedFile = document.getElementById("file").files[0];
-    //console.log("Tets");
-    console.log(selectedFile)
 
     for(let p = 0; p < 100; p++) {
         cpathsizes[p]=0; }
 
         fname = selectedFile.name;//get file name 
-        console.log(fname);
         rfname = fname;
-    
         rfname+="_report.txt";
 
         fs.writeFileSync(rfname, "Triples to Binaries Report for " + fname + "\n\n");
@@ -66,24 +59,23 @@ function myFunction(){
 
         if (!fs.existsSync(selectedFile.path)) {
             console.log("File does not exist!")
+            
         } else{
-            console.log("File Exists");
-        }
+
     
             
-        
+        if (fname.substring(fname.length-3, fname.length) == 'csv'){
         input_csv_file(fname) //check file extension when add xml
+        }
+        else{
+            console.log("xml");
+        }
         reportInputAndOuputConcepts();
         triples_to_binaries();
         output_cxt_file();
-    
-    
-
 }
 
 function input_csv_file(fname) {
-
-
 
     var pos;
     var source;
@@ -96,7 +88,7 @@ function input_csv_file(fname) {
     var delim = ""; // delimiter
     delim = ",";
     var input = ","; 
-    if (input == 't')
+    if (input == 't') //automatically recognise delim!!
         delim = '\t';
     if (input == 's')
         delim = ' ';
