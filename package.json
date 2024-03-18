@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^29.1.4"
+  },
+  "dependencies": {
+    "@zklogic/draw.io": "^15.7.2-rc1"
   }
 }
