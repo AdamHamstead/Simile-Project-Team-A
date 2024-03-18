@@ -26,6 +26,11 @@ export class Concept
         this.value = value;
     }
 
+    getValue()
+    {
+        return this.value;
+    }
+
     AddRelation(relation)
     {
         this.relationsnew.push(relation);
@@ -101,10 +106,15 @@ export class Relation
         this.target = target;
         this.value = value;
     }
+
+    getSource()
+    {
+        return this.source;
+    }
     
     getValue()
     {
-        return this.value
+        return this.value;
     }
 
     getTarget()
