@@ -44,41 +44,35 @@ var cpathsizes = [10000];
 
 document.getElementById("CGFCA").addEventListener("click", myFunction);
 
+var selectedFile; 
 
 function myFunction(){
-    //console.log("Tets");
-    //var path = document.getElementById("file").value //file path of selected file
 
+    selectedFile = document.getElementById("file").files[0];
+    //console.log("Tets");
+    console.log(selectedFile)
 
     for(let p = 0; p < 100; p++) {
         cpathsizes[p]=0; }
 
-        fname = "buiness.csv";//get file name 
-
+        fname = selectedFile.name;//get file name 
+        console.log(fname);
         rfname = fname;
     
         rfname+="_report.txt";
 
-        //fs.writeFileSync(rfname, "Triples to Binaries Report for " + fname + "\n\n");
+        fs.writeFileSync(rfname, "Triples to Binaries Report for " + fname + "\n\n");
 
 
-      //path =  "C:\\Users\\Aidan\\OneDrive\\Documents\\charger\\CharGer\\CGFCA Tools\\CG-FCA-v7\\Examples\\Business example (csv)"
-      //path =  "C:\Users\Aidan\OneDrive\Documents\charger\CharGer\CGFCA Tools\CG-FCA-v7\Examples\Business example (csv)\buiness.csv"
-      //path = path.substring(0, path.length - 12);
-
-
-        //console.log(path);
-        //path+= "\\buiness.csv"
-        if (!fs.existsSync(fname)) {
+        if (!fs.existsSync(selectedFile.path)) {
             console.log("File does not exist!")
-        } 
+        } else{
+            console.log("File Exists");
+        }
     
             
         
         input_csv_file(fname) //check file extension when add xml
-        
-        
-        
         reportInputAndOuputConcepts();
         triples_to_binaries();
         output_cxt_file();
@@ -108,7 +102,7 @@ function input_csv_file(fname) {
         delim = ' ';
 
 
-    let fileContent = fs.readFileSync(fname, 'utf8')
+    let fileContent = fs.readFileSync(selectedFile.path, 'utf8')
     for (const line of fileContent.split(/[\r\n]+/)){
         if (line != '') {
             n = 0;
