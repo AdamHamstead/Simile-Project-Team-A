@@ -33,63 +33,49 @@ var cpathsizes = [10000];
     var setnumber_of_relations = setnumber_of_relations;
     //GLOABAL VARIABLES
 
-
-    //import * as fs from 'fs'
     const fs = require('fs');
-
 
     let fname;
     let rfname;
-
+    let fileExists = true;
 
 document.getElementById("CGFCA").addEventListener("click", myFunction);
 
+var selectedFile; 
 
 function myFunction(){
-    //console.log("Tets");
-    //var path = document.getElementById("file").value //file path of selected file
 
+    selectedFile = document.getElementById("file").files[0];
 
     for(let p = 0; p < 100; p++) {
         cpathsizes[p]=0; }
 
-        fname = "buiness.csv";//get file name 
-
+        fname = selectedFile.name;//get file name 
         rfname = fname;
-    
         rfname+="_report.txt";
 
-        //fs.writeFileSync(rfname, "Triples to Binaries Report for " + fname + "\n\n");
+        fs.writeFileSync(rfname, "Triples to Binaries Report for " + fname + "\n\n");
 
 
-      //path =  "C:\\Users\\Aidan\\OneDrive\\Documents\\charger\\CharGer\\CGFCA Tools\\CG-FCA-v7\\Examples\\Business example (csv)"
-      //path =  "C:\Users\Aidan\OneDrive\Documents\charger\CharGer\CGFCA Tools\CG-FCA-v7\Examples\Business example (csv)\buiness.csv"
-      //path = path.substring(0, path.length - 12);
-
-
-        //console.log(path);
-        //path+= "\\buiness.csv"
-        if (!fs.existsSync(fname)) {
+        if (!fs.existsSync(selectedFile.path)) {
             console.log("File does not exist!")
-        } 
+            
+        } else{
+
     
             
-        
+        if (fname.substring(fname.length-3, fname.length) == 'csv'){
         input_csv_file(fname) //check file extension when add xml
-        
-        
-        
+        }
+        else{
+            console.log("xml");
+        }
         reportInputAndOuputConcepts();
         triples_to_binaries();
         output_cxt_file();
-    
-    
-
 }
 
 function input_csv_file(fname) {
-
-
 
     var pos;
     var source;
@@ -102,13 +88,13 @@ function input_csv_file(fname) {
     var delim = ""; // delimiter
     delim = ",";
     var input = ","; 
-    if (input == 't')
+    if (input == 't') //automatically recognise delim!!
         delim = '\t';
     if (input == 's')
         delim = ' ';
 
 
-    let fileContent = fs.readFileSync(fname, 'utf8')
+    let fileContent = fs.readFileSync(selectedFile.path, 'utf8')
     for (const line of fileContent.split(/[\r\n]+/)){
         if (line != '') {
             n = 0;
