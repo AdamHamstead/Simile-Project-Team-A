@@ -463,3 +463,4 @@ function find_concept(concept){
           ctxreport += ("\n");
         }
   }
+}
