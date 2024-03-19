@@ -399,3 +399,4 @@ function find_concept(concept){
           fs.appendFileSync(cfname, "\n");
         }
   }
+}
