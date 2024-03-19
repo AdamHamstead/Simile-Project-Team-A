@@ -59,21 +59,25 @@ function myFunction(){
 
         if (!fs.existsSync(selectedFile.path)) {
             console.log("File does not exist!")
-            
-        } else{
+            fileExists = false;
+        } 
 
     
-            
-        if (fname.substring(fname.length-3, fname.length) == 'csv'){
-        input_csv_file(fname) //check file extension when add xml
+        if (fileExists == true){
+            if (fname.substring(fname.length-3, fname.length) == 'csv'){
+                input_csv_file(fname) 
+            }
+            else{
+                console.log("xml") 
+            }
+            reportInputAndOuputConcepts();
+            triples_to_binaries();
+            output_cxt_file();
+        } else{
+            console.log("File doesnt exist");
         }
-        else{
-            console.log("xml");
-        }
-        reportInputAndOuputConcepts();
-        triples_to_binaries();
-        output_cxt_file();
 }
+
 
 function input_csv_file(fname) {
 
