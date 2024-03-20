@@ -2,8 +2,8 @@ var cpathsizes = [10000];
     var RELATION = 1; //relation index of triple
     var TARGET = 2; //target concept index of triple
     var ATTRIBUTE = 0;
-    var TIMES = 0;
-    var OBJECT = 0;
+    var TIMES = 2;
+    var OBJECT = 1;
     var SOURCE = 0;
     var numReps = 0;
     var setnumReps = setnumReps;
@@ -270,6 +270,7 @@ function find_concept(concept){
         //add a cross in the formal context for the attribute and target (object)
         context[target][attribute] = true; //This line somhow gets executed out of order with the above this is somhow set to true and above is done before direct oathwat is done
         //if object is an output and attribute involves an input then report pathway
+    }
         if (is_output(target) && is_input(attribute)) {
             fs.appendFileSync(rfname, "\n\nDirect Pathway: ");
             for (var p = 0; p < pathSize; p++) {
@@ -296,7 +297,7 @@ function find_concept(concept){
                 }
             }
         }
-    }
+    
   
   }
   function target_already_in_pathway(target, path, pathSize) {
@@ -403,4 +404,4 @@ function find_concept(concept){
           fs.appendFileSync(cfname, "\n");
         }
   }
-}
+
