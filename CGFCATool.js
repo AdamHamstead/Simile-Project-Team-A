@@ -465,3 +465,73 @@ function find_concept(concept){
           ctxreport += ("\n");
         }
   }
+}
+// XMLParserEntry(); dont need this entry - called in main
+function XMLParserEntry(){
+    //source of XML file - will be  dynamic later
+    let data = ReadXML();
+    let container = [[],[]]; //first array is roots, second array is triples
+    let Concepts= new Array();
+    XML_to_triple(data);
+    // rootids.forEach(element => {
+    //     container[0].push(CreateConcept(element,data,Concepts,container));
+    // });
+    return container
+}
+
+function ReadXML(){ 
+    let usefulData = [];
+    var data;
+    try
+    {
+        data = fs.readFileSync(fname).toString();
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+     //Reads the XML file and then converts it into a string
+    const words = data.split('\n'); //splits the text on new line
+    words.forEach(element => {
+        if(element.includes("mxCell")&&element.includes("value")){
+            usefulData.push(element); //finds all data that is an mxCell and has a value
+        }  
+    });
+    return usefulData;
+}
+function XML_to_triple(data){
+    let conceptIDs
+    let relationIDS
+    data.forEach(element => {
+        if(element.includes("target")&&element.includes("source")){
+            let target = element.slice(element.lastIndexOf('target="')+8, element.indexOf('"',element.lastIndexOf('target="')+10))
+            if(!relationIDS.includes(relation)){
+
+            }
+            triple[numtriples++][0] = conceptIDs.indexOf(element.slice(element.lastIndexOf('source="')+8, element.indexOf('"',element.lastIndexOf('source="')+10)));
+            triple[numtriples][1] = element.slice(element.lastIndexOf('value="')+8, element.indexOf('"',element.lastIndexOf('value="')+10));
+            triple[numtriples][2] = relationIDS.indexOf(target);
+            relation_labels[number_of_relations++]= triple[numtriples][2];
+        }
+        else{
+            conceptIDs.push(element.slice(element.lastIndexOf('id=')+3, element.indexOf('"',element.lastIndexOf('id=')+4)));
+            concepts[numconcepts++] = element.slice(element.lastIndexOf('value="')+8, element.indexOf('"',element.lastIndexOf('value="')+10));
+        }
+    });
+}
+// old code may be useful 
+// function FindRootNode(data){
+
+//     let IDs=[];
+//     let targets=[];
+//     data.forEach(element => {
+//         //Pushes the text inside the ID tag of the MXcell to IDs - does this by slicing between the index of the first and second " found 
+//         if(element.includes('target="')){
+//             targets.push(element.slice(element.lastIndexOf('target="')+8, element.indexOf('"',element.lastIndexOf('target="')+10)));
+//         }
+//         else {
+//             IDs.push(element.slice(element.indexOf('"')+1, element.indexOf('"',element.indexOf('"')+2))); 
+//         }
+//     });
+//     return IDs.filter((element) => !targets.includes(element)); //filters the array getting rid of all the repeated elements between arrays
+// }
