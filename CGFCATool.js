@@ -465,7 +465,6 @@ function find_concept(concept){
           ctxreport += ("\n");
         }
   }
-}
 // XMLParserEntry(); dont need this entry - called in main
 function XMLParserEntry(){
     //source of XML file - will be  dynamic later
