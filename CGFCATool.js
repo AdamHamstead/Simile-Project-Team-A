@@ -45,10 +45,12 @@ var cpathsizes = [10000];
 document.getElementById("CGFCA").addEventListener("click", myFunction);
 
 var selectedFile; 
+var delimiter;
 
 function myFunction(){
 
     selectedFile = document.getElementById("file").files[0];
+    delimiter = document.getElementById("delim").value;
 
     for(let p = 0; p < 100; p++) {
         cpathsizes[p]=0; }
@@ -151,8 +153,8 @@ function input_csv_file() {
     var a;
     var escaped;
     var delim = ""; // delimiter
-    delim = ",";
-    var input = ","; 
+    delim = delimiter;
+    var input = delim; 
     if (input == 't') //automatically recognise delim!!
         delim = '\t';
     if (input == 's')
