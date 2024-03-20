@@ -3,9 +3,6 @@
 <div>
 <h1>CGFCA</h1>
 </div>
-
-
-<br><br><br><br>
 <!DOCTYPE html>
 <html>
   <head>
@@ -24,29 +21,18 @@
 
     <title>Electron App</title>
   </head>
-
   
-
-
-
   <body>
-    <div>
-
-      
-
-<br>
-
-<div class="horizontal">
-  <label>Choose a file:</label>
-
-<input type="file" id="file" name="file" accept=".csv, .xml"/>
-<input type="text" id="delim" name="'delim" maxlength="1">
-  <button class="buttonOther" id="CGFCA">CGFCA</button>
-
-</div>
-  <script src="quit.js"></script>
-  <script src="CGFCATool.js"></script>
-  <br><br>
+    <div class="horizontal">
+      <label>Choose a file:</label>
+    
+    <input type="file" id="file" name="file" accept=".csv, .xml"/>
+    <label for="delim" id="delimLabel">Please enter a delimiter:</label>
+    <input type="text" id="delim" name="delim" maxlength="1">
+      <button class="buttonOther" id="CGFCA">CGFCA</button>
+    
+    </div>
+  <div>
   <iframe
     id="drawio-desktop"
     title="drawio-desktop"
@@ -56,4 +42,7 @@
   </iframe>
 </div>
   </body>
+  <script src="quit.js"></script>
+  <script src="CGFCATool.js"></script>
+  <script src="delim.js"></script>
 </html>
