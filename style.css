@@ -20,6 +20,7 @@
 
   div{
     margin: 0 1cm ;
+    display: flex;
   }
 
   body {
@@ -66,6 +67,16 @@
   #vertical-buttons button{
     margin-bottom: 1.5cm;
     margin-top: 1.3cm;
+  }
+
+  #delim
+  {
+    display: none;
+  }
+
+  #delimLabel
+  {
+    display: none;
   }
   
   
