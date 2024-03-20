@@ -1,0 +1,50 @@
+{
+  "name": "@zklogic/draw.io",
+  "version": "15.7.2-rc1",
+  "description": "Draw.IO - Graph Editor integration in Angular-cli",
+  "main": "./dist/grapheditor.js",
+  "types": "./dist/types/webpack.index.d.ts",
+  "scripts": {
+    "start": "rmdir dist /S /Q & npx webpack serve --mode=development --config webpack.config.js",
+    "build:types": "rmdir dist\\types /S /Q & tsc -p tsconfig.json",
+    "clean": "del out.txt & rmdir dist /S /Q & del *-draw.io-*.tgz",
+    "build:prod": "npm run clean & npm run build:types & npx webpack --mode=production --config webpack.config.js --progress --profile & npm pack",
+    "build": "npm run build:prod > out.txt",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArfanMirza/drawio.git"
+  },
+  "keywords": [
+    "draw.io",
+    "diagram",
+    "flowchart-angular",
+    "UML",
+    "grapheditor-angular"
+  ],
+  "author": "JGraph",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jgraph/drawio-desktop/issues"
+  },
+  "homepage": "https://github.com/ArfanMirza/drawio",
+  "dependencies": {
+    "pdf-lib": "^1.16.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "babel-loader": "^8.2.3",
+    "compression-webpack-plugin": "^9.2.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "html-webpack-plugin": "^5.5.0",
+    "typescript": "^4.4.4",
+    "webpack": "^5.64.2",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.3"
+  },
+  "files": [
+    "dist"
+  ]
+}
