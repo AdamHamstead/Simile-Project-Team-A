@@ -2,8 +2,8 @@ var cpathsizes = [10000];
     var RELATION = 1; //relation index of triple
     var TARGET = 2; //target concept index of triple
     var ATTRIBUTE = 0;
-    var TIMES = 0;
-    var OBJECT = 0;
+    var TIMES = 2;
+    var OBJECT = 1;
     var SOURCE = 0;
     var numReps = 0;
     var setnumReps = setnumReps;
@@ -37,45 +37,112 @@ var cpathsizes = [10000];
 
     let fname;
     let rfname;
-    let fileExists = true;
+
+    var reporttxt = "";
+    var ctxreport = "";
+
 
 document.getElementById("CGFCA").addEventListener("click", myFunction);
 
 var selectedFile; 
+var delimiter;
 
 function myFunction(){
 
     selectedFile = document.getElementById("file").files[0];
+    delimiter = document.getElementById("delim").value;
 
     for(let p = 0; p < 100; p++) {
         cpathsizes[p]=0; }
 
         fname = selectedFile.name;//get file name 
+        let pos = fname.indexOf(".");
         rfname = fname;
-        rfname+="_report.txt";
+        rfname = fname.substring(0,pos) + "_report.txt";
+        let cfname = fname.substring(0,pos) + ".cxt";
+    
+        reporttxt += ("Triples to Binaries Report for " + fname + "\n\n" + "\n");
 
-        fs.writeFileSync(rfname, "Triples to Binaries Report for " + fname + "\n\n");
-
-
+        //select the file path
+        var fileExists = true;
         if (!fs.existsSync(selectedFile.path)) {
             console.log("File does not exist!")
-            
-        } else{
+            fileExists = false;
+        } 
 
-    
-            
-        if (fname.substring(fname.length-3, fname.length) == 'csv'){
-        input_csv_file(fname) //check file extension when add xml
+        var correctFileType = true;
+        if (fileExists == true){
+            if (fname.substring(fname.length-3, fname.length) == 'csv'){
+                input_csv_file() 
+            }
+            else if (fname.substring(fname.length-3, fname.length) == 'xml'){
+                console.log("xml")
+            }
+            else{
+                console.log("File is not a csv or xml file")
+                correctFileType = false;
+            }
+        } else{
+            console.log("File doesnt exist");
         }
-        else{
-            console.log("xml");
+
+        if (correctFileType){
+            reportInputAndOuputConcepts();
+            triples_to_binaries();
+            output_cxt_file();    
+            download(reporttxt, rfname, 'text/plain');
+            download(ctxreport, cfname, 'text/plain');          
         }
-        reportInputAndOuputConcepts();
-        triples_to_binaries();
-        output_cxt_file();
+
+
 }
 
-function input_csv_file(fname) {
+function download(strData, strFileName, strMimeType) {
+
+    var D = document,
+        A = arguments,
+        a = D.createElement("a"),
+        d = A[0],
+        n = A[1],
+        t = A[2] || "text/plain";
+
+    //build download link:
+    
+    a.href = "data:" + strMimeType + "charset=utf-8," + escape(strData);
+
+
+    if (window.MSBlobBuilder) { // IE10
+        var bb = new MSBlobBuilder();
+        bb.append(strData);
+        return navigator.msSaveBlob(bb, strFileName);
+    } /* end if(window.MSBlobBuilder) */
+
+
+
+    if ('download' in a) { //FF20, CH19
+        a.setAttribute("download", n);
+        a.innerHTML = "downloading...";
+        D.body.appendChild(a);
+        setTimeout(function() {
+            var e = D.createEvent("MouseEvents");
+            e.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            a.dispatchEvent(e);
+            D.body.removeChild(a);
+        }, 66);
+        return true;
+    }
+    //do iframe dataURL download: (older W3)
+    var f = D.createElement("iframe");
+    D.body.appendChild(f);
+    f.src = "data:" + (A[2] ? A[2] : "application/octet-stream") + (window.btoa ? ";base64" : "") + "," + (window.btoa ? window.btoa : escape)(strData);
+    setTimeout(function() {
+        D.body.removeChild(f);
+    }, 333);
+    return true;
+}
+
+
+function input_csv_file() {
 
     var pos;
     var source;
@@ -86,8 +153,8 @@ function input_csv_file(fname) {
     var a;
     var escaped;
     var delim = ""; // delimiter
-    delim = ",";
-    var input = ","; 
+    delim = delimiter;
+    var input = delim; 
     if (input == 't') //automatically recognise delim!!
         delim = '\t';
     if (input == 's')
@@ -204,24 +271,24 @@ function find_concept(concept){
   }
   //report input concepts
   if (numInputs == 0) {
-      fs.appendFileSync(rfname, "\n\nThere are no inputs");
+        reporttxt += ("\n\nThere are no inputs");
     }
   else {
-    fs.appendFileSync(rfname, "\n\nInputs: ");
+        reporttxt += ("\n\nInputs: ");
 
       for (var i = 0; i < numInputs; i++) {
-        fs.appendFileSync(rfname, '\"' + concepts[input_concepts[i]] + "\" ");
+        reporttxt += ('\"' + concepts[input_concepts[i]] + "\" ");
 
       }
   }
   //report output concepts
   if (numOutputs == 0) {
-    fs.appendFileSync(rfname, "\n\nThere are no outputs.");
+    reporttxt += ("\n\nThere are no outputs.");
   }
   else {
-    fs.appendFileSync(rfname, "\n\nOutputs: ");
+    reporttxt += ("\n\nOutputs: ");
       for (var i = 0; i < numOutputs; i++) {
-        fs.appendFileSync(rfname, '\"' + concepts[output_concepts[i]] + "\" ");
+        reporttxt += ('\"' + concepts[output_concepts[i]] + "\" ");
       }
   }
   
@@ -245,7 +312,7 @@ function find_concept(concept){
         var output = repeats[i][OBJECT];
         var target = triple[repeats[i][ATTRIBUTE]][TARGET];
         var times = repeats[i][TIMES] + 1;
-        fs.appendFileSync(rfname, "\n\n " + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
+        reporttxt += ("\n\n " + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
     }
   }
   
@@ -266,23 +333,24 @@ function find_concept(concept){
         //add a cross in the formal context for the attribute and target (object)
         context[target][attribute] = true; //This line somhow gets executed out of order with the above this is somhow set to true and above is done before direct oathwat is done
         //if object is an output and attribute involves an input then report pathway
+    }
         if (is_output(target) && is_input(attribute)) {
-            fs.appendFileSync(rfname, "\n\nDirect Pathway: ");
+            reporttxt += ("\n\nDirect Pathway: ");
             for (var p = 0; p < pathSize; p++) {
-                fs.appendFileSync(rfname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
+                reporttxt += (concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
             }
-            fs.appendFileSync(rfname,concepts[target]);
+            reporttxt += (concepts[target]);
         }
         if (triple[attribute][SOURCE] == target) { //if source is its own target, its a cycle!
             if (is_new_cycle(path, pathSize)) {
                 cpathsizes[numcpaths] = pathSize;
-                fs.appendFileSync(rfname, "\n\nCycle: ");
+                reporttxt += ("\n\nCycle: ");
                 for (var p = 0; p < pathSize; p++) {
-                    fs.appendFileSync(rfname, concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
+                    reporttxt += (concepts[path[p][0]] + " - " + relation_labels[path[p][1]] + " - ");
                     cyclePaths[numcpaths][p] = path[p][0];
                 }
-                fs.appendFileSync(rfname, concepts[path[0][0]]);
-                 numcpaths++;
+                reporttxt += (concepts[path[0][0]]);
+                numcpaths++;
             }
         }
         if (!target_already_in_pathway(target, path, pathSize)) {
@@ -292,7 +360,7 @@ function find_concept(concept){
                 }
             }
         }
-    }
+    
   
   }
   function target_already_in_pathway(target, path, pathSize) {
@@ -375,28 +443,26 @@ function find_concept(concept){
   }
   
   function output_cxt_file() {
-    let pos = fname.indexOf(".");
-	let cfname = fname.substring(0,pos) + ".cxt";
-	fs.writeFileSync(cfname, "B\n\n");
-	fs.appendFileSync(cfname, numconcepts + "\n");
-	fs.appendFileSync(cfname, numtriples + "\n\n");
+    ctxreport += ("B\n\n");
+    ctxreport += (numconcepts + "\n");
+    ctxreport += (numtriples + "\n\n");
 
       for (var i = 0; i < numconcepts; i++) {
-        fs.appendFileSync(cfname, concepts[i] + "\n");
+        ctxreport += (concepts[i] + "\n");
       }
       for (var j = 0; j < numtriples; j++) {
-        fs.appendFileSync(cfname, concepts[triple[j][SOURCE]] + " " + relation_labels[triple[j][RELATION]] + "\n");
+        ctxreport += (concepts[triple[j][SOURCE]] + " " + relation_labels[triple[j][RELATION]] + "\n");
       }
       for (var i = 0; i < numconcepts; i++) {
           for (var j = 0; j < numtriples; j++) {
               if (context[i][j]) {
-				fs.appendFileSync(cfname, "X");
+                ctxreport += ("X");
               }
               else {
-				fs.appendFileSync(cfname, ".");
+                ctxreport += (".");
               }
           }
-          fs.appendFileSync(cfname, "\n");
+          ctxreport += ("\n");
         }
   }
 }

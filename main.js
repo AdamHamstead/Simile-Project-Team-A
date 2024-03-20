@@ -1,10 +1,13 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, screen, ipcMain} = require('electron')
 
 
 const createWindow = () => {
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const { width, height } = primaryDisplay.workAreaSize
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: width,
+    frame: false, //would remove close buttons that dont work so the only option would be the exit button that works
+    height: height,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -12,12 +15,16 @@ const createWindow = () => {
   })
 
   win.loadFile('index.html')
+  
 }
 
 app.whenReady().then(() => {
-  createWindow()
+ createWindow()
 })
 
+ipcMain.on('close', () => {
+  app.quit()
+})
 
 
 
