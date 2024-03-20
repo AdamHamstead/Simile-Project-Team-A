@@ -2,6 +2,42 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
   margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+}
+
+form input{
+  width: 25rem;
+}
+
+button{
+  width: 105px;
+}
+
+button::after {
+  content: "";
+  display: block;
+  height: 5px;
+  width: 0;
+  background-color: #fff;
+  transition: 0.1s width linear;
+  margin: 0 auto;
+}
+  
+button:hover::after {
+  width: 100%;
+}
+
+#vertical-buttons {
+  height: 100vh;
+  width: 210px; /* set initial width */
+  position: fixed;
+  z-index: 999;
+  right:0;
+  color: #fff;
+  transform-origin: top right;
+  white-space: nowrap;
+}
+
+#vertical-buttons button{
+  margin-bottom: 1.5cm;
+  margin-top: 1.3cm;
 }
