@@ -1,15 +1,20 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
-  margin: auto;
+  margin: 0 1cm ;
 }
 
 form input{
   width: 25rem;
+  height: 20px;
+  border-radius: 8px;
 }
 
 button{
   width: 105px;
+  height: 33px;
+  padding: 5px 2px 1px 2px ;
+  border-radius: 8px;
 }
 
 button::after {
@@ -33,8 +38,6 @@ button:hover::after {
   z-index: 999;
   right:0;
   color: #fff;
-  transform-origin: top right;
-  white-space: nowrap;
 }
 
 #vertical-buttons button{
