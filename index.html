@@ -1,4 +1,10 @@
 <button class="buttonExit" id="Iframe">X</button>
+<br>
+<div>
+<h1>CGFCA</h1>
+</div>
+
+
 <br><br><br><br>
 <!DOCTYPE html>
 <html>
@@ -24,18 +30,18 @@
 
 
   <body>
-    <h1>Electron</h1>
+    <div>
 
       
 
 <br>
 
-<div>
+<div class="horizontal">
   <label>Choose a file:</label>
 
 <input type="file" id="file" name="file" accept=".csv, .xml"/>
 
-  <button id="CGFCA">CGFCA</button>
+  <button class="buttonOther" id="CGFCA">CGFCA</button>
 
 </div>
   <script src="quit.js"></script>
@@ -44,9 +50,10 @@
   <iframe
     id="drawio-desktop"
     title="drawio-desktop"
-    width="100%"
-    height="780px"
+    width="99%"
+    height="70%"
     src="node_modules\@zklogic\draw.io\dist\index.html">
   </iframe>
+</div>
   </body>
 </html>
