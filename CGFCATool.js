@@ -53,7 +53,6 @@ function myFunction(){
     for(let p = 0; p < 100; p++) {
         cpathsizes[p]=0; }
 
-        //fname = "Reports+Cxt\\"
         fname = selectedFile.name;//get file name 
         let pos = fname.indexOf(".");
         rfname = fname;
@@ -69,30 +68,30 @@ function myFunction(){
             fileExists = false;
         } 
 
-    
+        var correctFileType = true;
         if (fileExists == true){
             if (fname.substring(fname.length-3, fname.length) == 'csv'){
-                input_csv_file(fname) 
-                reportInputAndOuputConcepts();
-                triples_to_binaries();
-                output_cxt_file();    
+                input_csv_file() 
             }
             else if (fname.substring(fname.length-3, fname.length) == 'xml'){
                 console.log("xml")
-                reportInputAndOuputConcepts();
-                triples_to_binaries();
-                output_cxt_file();    
             }
             else{
                 console.log("File is not a csv or xml file")
+                correctFileType = false;
             }
         } else{
             console.log("File doesnt exist");
         }
 
+        if (correctFileType){
+            reportInputAndOuputConcepts();
+            triples_to_binaries();
+            output_cxt_file();    
+            download(reporttxt, rfname, 'text/plain');
+            download(ctxreport, cfname, 'text/plain');          
+        }
 
-        download(reporttxt, rfname, 'text/plain');
-        download(ctxreport, cfname, 'text/plain');      
 
 }
 
@@ -141,7 +140,7 @@ function download(strData, strFileName, strMimeType) {
 }
 
 
-function input_csv_file(fname) {
+function input_csv_file() {
 
     var pos;
     var source;
@@ -464,4 +463,3 @@ function find_concept(concept){
           ctxreport += ("\n");
         }
   }
-

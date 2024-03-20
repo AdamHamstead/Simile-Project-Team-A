@@ -6,6 +6,7 @@ const createWindow = () => {
   const { width, height } = primaryDisplay.workAreaSize
   const win = new BrowserWindow({
     width: width,
+    frame: false, //would remove close buttons that dont work so the only option would be the exit button that works
     height: height,
     webPreferences: {
       nodeIntegration: true,
