@@ -22,26 +22,27 @@
 
     <title>Electron App</title>
   </head>
-  
+
   <body>
-    <div class="horizontal">
-      <label>Choose a file:</label>
+    <div class="center flex">
+      <label for="file">Choose a file:</label>
     
-    <input type="file" id="file" name="file" accept=".csv, .xml"/>
-    <label for="delim" id="delimLabel">Please enter a delimiter:</label>
-    <input type="text" id="delim" name="delim" maxlength="1">
+      <input type="file" id="file" name="file" accept=".csv, .xml"/>
+      <label for="delim" id="delimLabel">Please enter a delimiter:</label>
+      <input type="text" id="delim" name="delim" maxlength="1">
       <button class="buttonOther" id="CGFCA">CGFCA</button>
     
     </div>
-  <div>
-  <iframe
-    id="drawio-desktop"
-    title="drawio-desktop"
-    width="99%"
-    height="70%"
-    src="node_modules\@zklogic\draw.io\dist\index.html">
-  </iframe>
-</div>
+  
+    <div class = 'flex-2'>
+      <iframe
+        id="drawio-desktop"
+        title="drawio-desktop"
+        width="100%"
+        height="100%"
+        src="node_modules\@zklogic\draw.io\dist\index.html">
+      </iframe>
+    </div>
   </body>
   <script src="quit.js"></script>
   <script src="CGFCATool.js"></script>
