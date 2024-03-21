@@ -96,7 +96,6 @@ function myFunction(){
                 setTimeout(() => {
                     alert("Report Downloaded");
                     download(ctxreport, cfname, 'text/plain'); 
-                    alert("CXT file Downloaded");  
                 }, 1000);
             }
             else
