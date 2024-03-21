@@ -44,10 +44,52 @@ var cpathsizes = [10000];
 
 document.getElementById("CGFCA").addEventListener("click", myFunction);
 
+
 var selectedFile; 
 var delimiter;
 
 function myFunction(){
+
+     cpathsizes = [10000];
+     RELATION = 1; //relation index of triple
+     TARGET = 2; //target concept index of triple
+     ATTRIBUTE = 0;
+     TIMES = 2;
+     OBJECT = 1;
+     SOURCE = 0;
+     numReps = 0;
+     setnumReps = setnumReps;
+     repeats = Array.from(Array(10000), function () { return new Array(3).fill(0); });
+     cyclePaths = Array.from(Array(10000), function () { return new Array(10000).fill(0); });
+     numcpaths = 0;
+     setnumcpaths = setnumcpaths;
+     triple = Array.from(Array(5000), function () { return new Array(3).fill(0); });
+     numtriples = 0;
+     setnumtriples = setnumtriples;
+     relation_labels = new Array(1000);
+     setrelationlabels = setrelationlabels;
+     MAX_ROWS = 1000;
+     MAX_COLS = 1000;
+     context = Array.from(Array(MAX_ROWS), function () { return new Array(MAX_COLS).fill(0); });
+     concepts = new Array(1000); //FCA formal object name = GC Target Concept
+     setconcepts = setconcepts;
+     numconcepts = 0;
+     setnumconcepts = setnumconcepts;
+     input_concepts = new Array(1000);
+     output_concepts = new Array(1000);
+     numOutputs = 0;
+     numInputs = 0;
+     setnumInputs = setnumInputs;
+     setnumOutputs = setnumOutputs;
+     number_of_relations = 0;
+     setnumber_of_relations = setnumber_of_relations;
+    
+    reporttxt = "";
+    ctxreport = "";
+
+
+
+    //set global varibales
 
     selectedFile = document.getElementById("file").files[0];
     delimiter = document.getElementById("delim").value;
@@ -477,13 +519,10 @@ function find_concept(concept){
 function XMLParserEntry(){
     //source of XML file - will be  dynamic later
     let data = ReadXML();
-    let container = [[],[]]; //first array is roots, second array is triples
-    let Concepts= new Array();
     XML_to_triple(data);
     // rootids.forEach(element => {
     //     container[0].push(CreateConcept(element,data,Concepts,container));
     // });
-    return container
 }
 
 function ReadXML(){ 
@@ -509,30 +548,40 @@ function ReadXML(){
 function XML_to_triple(data){
     let conceptIDs=new Array()
     let relationIDS = new Array()
-    data.forEach(element => {
-        if(element.includes("target")&&element.includes("source")){
-            let target = conceptIDs.indexOf(element.slice(element.lastIndexOf('target="')+8, element.indexOf('"',element.lastIndexOf('target="')+10)));
-            let source = conceptIDs.indexOf(element.slice(element.lastIndexOf('source="')+8, element.indexOf('"',element.lastIndexOf('source="')+10)));
+    for (var i = 0; i < data.length; i++) {
+        if(data[i].includes("target")&&data[i].includes("source")){
+            let target = conceptIDs.indexOf(data[i].slice(data[i].lastIndexOf('target="')+8, data[i].indexOf('"',data[i].lastIndexOf('target="')+10)));
+            let source = conceptIDs.indexOf(data[i].slice(data[i].lastIndexOf('source="')+8, data[i].indexOf('"',data[i].lastIndexOf('source="')+10)));
             if(target>-1&&source>-1){
-                relation_labels[number_of_relations++]= element.slice(element.lastIndexOf('value="')+7, element.indexOf('"',element.lastIndexOf('value="')+8));
+                value =  data[i].slice(data[i].lastIndexOf('value="')+7, data[i].indexOf('"',data[i].lastIndexOf('value="')+8));
+                if(value.includes("&amp;nbsp;")){
+                    value = value.replace('&amp;nbsp;','');
+                }
+                relation_labels[number_of_relations]= value;
 
-                triple[numtriples++][0] = source;
-                triple[numtriples][1] = number_of_relations;
-                triple[numtriples][2] = target;
+                triple[numtriples][0] = source;
+                triple[numtriples][1] = number_of_relations++;
+                triple[numtriples++][2] = target;
             }
             else{
-                data.push(element)
+                data.push(data[i])
 
             }
 
         }
         else{
-            id = element.slice(element.lastIndexOf('id=')+4, element.indexOf('"',element.lastIndexOf('id=')+5));
-            conceptIDs.push(id);
-            value =  element.slice(element.lastIndexOf('value="')+7, element.indexOf('"',element.lastIndexOf('value="')+8));
-            concepts[numconcepts++] = value
+            let temp = data[i].charAt(data[i].lastIndexOf('value="')+7);
+            if(temp!='"'){
+                id = data[i].slice(data[i].lastIndexOf('id=')+4, data[i].indexOf('"',data[i].lastIndexOf('id=')+5));
+                conceptIDs.push(id);
+                value =  data[i].slice(data[i].lastIndexOf('value="')+7, data[i].indexOf('"',data[i].lastIndexOf('value="')+8));
+                if(value.includes("&amp;nbsp;")){
+                    value = value.replace('&amp;nbsp;','');
+                }
+                concepts[numconcepts++] = value
+            }
         }
-    });
+    }
 }
 // old code may be useful 
 // function FindRootNode(data){
