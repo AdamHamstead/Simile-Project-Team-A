@@ -76,7 +76,7 @@ function myFunction(){
                 input_csv_file() 
             }
             else if (fname.substring(fname.length-3, fname.length) == 'xml'){
-                console.log("xml")
+                XMLParserEntry();
             }
             else{
                 console.log("File is not a csv or xml file")
@@ -483,14 +483,14 @@ function ReadXML(){
     var data;
     try
     {
-        data = fs.readFileSync(fname).toString();
+        data = fs.readFileSync(selectedFile.path).toString();
     }
     catch(err)
     {
         console.log(err);
     }
      //Reads the XML file and then converts it into a string
-    const words = data.split('\n'); //splits the text on new line
+    const words =data.split(/[\r\n]+/); //splits the text on new line
     words.forEach(element => {
         if(element.includes("mxCell")&&element.includes("value")){
             usefulData.push(element); //finds all data that is an mxCell and has a value
@@ -499,22 +499,22 @@ function ReadXML(){
     return usefulData;
 }
 function XML_to_triple(data){
-    let conceptIDs
-    let relationIDS
+    let conceptIDs=new Array(1000)
+    let relationIDS = new Array(1000)
     data.forEach(element => {
         if(element.includes("target")&&element.includes("source")){
             let target = element.slice(element.lastIndexOf('target="')+8, element.indexOf('"',element.lastIndexOf('target="')+10))
-            if(!relationIDS.includes(relation)){
+            let source = conceptIDs.indexOf(element.slice(element.lastIndexOf('source="')+8, element.indexOf('"',element.lastIndexOf('source="')+10)))
+            
+            relation_labels[number_of_relations++]= element.slice(element.lastIndexOf('value="')+7, element.indexOf('"',element.lastIndexOf('value="')+8));
 
-            }
-            triple[numtriples++][0] = conceptIDs.indexOf(element.slice(element.lastIndexOf('source="')+8, element.indexOf('"',element.lastIndexOf('source="')+10)));
-            triple[numtriples][1] = element.slice(element.lastIndexOf('value="')+8, element.indexOf('"',element.lastIndexOf('value="')+10));
+            triple[numtriples++][0] = relationIDS.indexOf(source);
+            triple[numtriples][1] = relation_labels[number_of_relations];
             triple[numtriples][2] = relationIDS.indexOf(target);
-            relation_labels[number_of_relations++]= triple[numtriples][2];
         }
         else{
             conceptIDs.push(element.slice(element.lastIndexOf('id=')+3, element.indexOf('"',element.lastIndexOf('id=')+4)));
-            concepts[numconcepts++] = element.slice(element.lastIndexOf('value="')+8, element.indexOf('"',element.lastIndexOf('value="')+10));
+            concepts[numconcepts++] = element.slice(element.lastIndexOf('value="')+6, element.indexOf('"',element.lastIndexOf('value="')+8));
         }
     });
 }
