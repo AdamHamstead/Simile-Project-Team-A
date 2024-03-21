@@ -46,8 +46,6 @@ window.minimize();
 })
 
 ipcMain.on('reSize', () => {
-
-
   if(window.isMaximized()){
     window.unmaximize();
   }else{
@@ -55,9 +53,6 @@ ipcMain.on('reSize', () => {
   }
   })
   
-
-
-
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
   })

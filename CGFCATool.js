@@ -91,7 +91,18 @@ function myFunction(){
             triples_to_binaries();
             output_cxt_file();    
             download(reporttxt, rfname, 'text/plain');
-            download(ctxreport, cfname, 'text/plain');          
+            if(process.platform == 'darwin')
+            {
+                setTimeout(() => {
+                    alert("Report Downloaded");
+                    download(ctxreport, cfname, 'text/plain'); 
+                    alert("CXT file Downloaded");  
+                }, 1000);
+            }
+            else
+            {
+                download(ctxreport, cfname, 'text/plain');    
+            }
         }
 
 
@@ -123,12 +134,10 @@ function download(strData, strFileName, strMimeType) {
         a.setAttribute("download", n);
         a.innerHTML = "downloading...";
         D.body.appendChild(a);
-        setTimeout(function() {
             var e = D.createEvent("MouseEvents");
             e.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
             a.dispatchEvent(e);
             D.body.removeChild(a);
-        }, 66);
         return true;
     }
     //do iframe dataURL download: (older W3)
