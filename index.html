@@ -1,9 +1,3 @@
-<button class="buttonExit" id="Iframe">X</button>
-
-<br>
-<div>
-<h1>CGFCA</h1>
-</div>
 <!DOCTYPE html>
 <html>
   <head>
@@ -23,14 +17,26 @@
     <title>Electron App</title>
   </head>
 
+  
+<div class="topnav">
+
+  <button class="buttonExit" id="Iframe">X</button>
+  <button class="buttonminimise" id="small">&#9723;</button>
+  <button class="buttonminimise" id="min">—</button>
+</div>
   <body>
     <div class="center flex">
-      <label for="file">Choose a file:</label>
-    
-      <input type="file" id="file" name="file" accept=".csv, .xml"/>
-      <label for="delim" id="delimLabel">Please enter a delimiter:</label>
-      <input type="text" id="delim" name="delim" maxlength="1">
-      <button class="buttonOther" id="CGFCA">CGFCA</button>
+      <div class="left-align">
+        <h1>CGFCA</h1>
+      </div>
+      <div class="">
+        <label for="file">Choose a file:</label>
+        <input type="file" id="file" name="file" accept=".csv, .xml"/>
+        <label for="delim" id="delimLabel">Please enter a delimiter:</label>
+        <input type="text" id="delim" name="delim" maxlength="1">
+        <button class="buttonOther" id="CGFCA">CGFCA</button>
+      </div>
+      
     
     </div>
   
