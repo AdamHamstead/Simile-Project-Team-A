@@ -519,13 +519,10 @@ function find_concept(concept){
 function XMLParserEntry(){
     //source of XML file - will be  dynamic later
     let data = ReadXML();
-    let container = [[],[]]; //first array is roots, second array is triples
-    let Concepts= new Array();
     XML_to_triple(data);
     // rootids.forEach(element => {
     //     container[0].push(CreateConcept(element,data,Concepts,container));
     // });
-    return container
 }
 
 function ReadXML(){ 
@@ -551,30 +548,40 @@ function ReadXML(){
 function XML_to_triple(data){
     let conceptIDs=new Array()
     let relationIDS = new Array()
-    data.forEach(element => {
-        if(element.includes("target")&&element.includes("source")){
-            let target = conceptIDs.indexOf(element.slice(element.lastIndexOf('target="')+8, element.indexOf('"',element.lastIndexOf('target="')+10)));
-            let source = conceptIDs.indexOf(element.slice(element.lastIndexOf('source="')+8, element.indexOf('"',element.lastIndexOf('source="')+10)));
+    for (var i = 0; i < data.length; i++) {
+        if(data[i].includes("target")&&data[i].includes("source")){
+            let target = conceptIDs.indexOf(data[i].slice(data[i].lastIndexOf('target="')+8, data[i].indexOf('"',data[i].lastIndexOf('target="')+10)));
+            let source = conceptIDs.indexOf(data[i].slice(data[i].lastIndexOf('source="')+8, data[i].indexOf('"',data[i].lastIndexOf('source="')+10)));
             if(target>-1&&source>-1){
-                relation_labels[number_of_relations++]= element.slice(element.lastIndexOf('value="')+7, element.indexOf('"',element.lastIndexOf('value="')+8));
+                value =  data[i].slice(data[i].lastIndexOf('value="')+7, data[i].indexOf('"',data[i].lastIndexOf('value="')+8));
+                if(value.includes("&amp;nbsp;")){
+                    value = value.replace('&amp;nbsp;','');
+                }
+                relation_labels[number_of_relations]= value;
 
-                triple[numtriples++][0] = source;
-                triple[numtriples][1] = number_of_relations;
-                triple[numtriples][2] = target;
+                triple[numtriples][0] = source;
+                triple[numtriples][1] = number_of_relations++;
+                triple[numtriples++][2] = target;
             }
             else{
-                data.push(element)
+                data.push(data[i])
 
             }
 
         }
         else{
-            id = element.slice(element.lastIndexOf('id=')+4, element.indexOf('"',element.lastIndexOf('id=')+5));
-            conceptIDs.push(id);
-            value =  element.slice(element.lastIndexOf('value="')+7, element.indexOf('"',element.lastIndexOf('value="')+8));
-            concepts[numconcepts++] = value
+            let temp = data[i].charAt(data[i].lastIndexOf('value="')+7);
+            if(temp!='"'){
+                id = data[i].slice(data[i].lastIndexOf('id=')+4, data[i].indexOf('"',data[i].lastIndexOf('id=')+5));
+                conceptIDs.push(id);
+                value =  data[i].slice(data[i].lastIndexOf('value="')+7, data[i].indexOf('"',data[i].lastIndexOf('value="')+8));
+                if(value.includes("&amp;nbsp;")){
+                    value = value.replace('&amp;nbsp;','');
+                }
+                concepts[numconcepts++] = value
+            }
         }
-    });
+    }
 }
 // old code may be useful 
 // function FindRootNode(data){
