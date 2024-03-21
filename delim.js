@@ -4,7 +4,7 @@
 
     var textBoxLabel = document.getElementById("delimLabel");
 
-    document.getElementById("delim").addEventListener("change", enableButton);
+    document.getElementById("delim").addEventListener("keyup", enableButton);
 
 
     control.addEventListener("change", function(event) {
@@ -37,3 +37,5 @@
 
         }   
     }
+
+    
