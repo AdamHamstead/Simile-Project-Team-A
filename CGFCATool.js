@@ -44,10 +44,52 @@ var cpathsizes = [10000];
 
 document.getElementById("CGFCA").addEventListener("click", myFunction);
 
+
 var selectedFile; 
 var delimiter;
 
 function myFunction(){
+
+     cpathsizes = [10000];
+     RELATION = 1; //relation index of triple
+     TARGET = 2; //target concept index of triple
+     ATTRIBUTE = 0;
+     TIMES = 2;
+     OBJECT = 1;
+     SOURCE = 0;
+     numReps = 0;
+     setnumReps = setnumReps;
+     repeats = Array.from(Array(10000), function () { return new Array(3).fill(0); });
+     cyclePaths = Array.from(Array(10000), function () { return new Array(10000).fill(0); });
+     numcpaths = 0;
+     setnumcpaths = setnumcpaths;
+     triple = Array.from(Array(5000), function () { return new Array(3).fill(0); });
+     numtriples = 0;
+     setnumtriples = setnumtriples;
+     relation_labels = new Array(1000);
+     setrelationlabels = setrelationlabels;
+     MAX_ROWS = 1000;
+     MAX_COLS = 1000;
+     context = Array.from(Array(MAX_ROWS), function () { return new Array(MAX_COLS).fill(0); });
+     concepts = new Array(1000); //FCA formal object name = GC Target Concept
+     setconcepts = setconcepts;
+     numconcepts = 0;
+     setnumconcepts = setnumconcepts;
+     input_concepts = new Array(1000);
+     output_concepts = new Array(1000);
+     numOutputs = 0;
+     numInputs = 0;
+     setnumInputs = setnumInputs;
+     setnumOutputs = setnumOutputs;
+     number_of_relations = 0;
+     setnumber_of_relations = setnumber_of_relations;
+    
+    reporttxt = "";
+    ctxreport = "";
+
+
+
+    //set global varibales
 
     selectedFile = document.getElementById("file").files[0];
     delimiter = document.getElementById("delim").value;
