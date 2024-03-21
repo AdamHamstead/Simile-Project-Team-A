@@ -507,22 +507,30 @@ function ReadXML(){
     return usefulData;
 }
 function XML_to_triple(data){
-    let conceptIDs=new Array(1000)
-    let relationIDS = new Array(1000)
+    let conceptIDs=new Array()
+    let relationIDS = new Array()
     data.forEach(element => {
         if(element.includes("target")&&element.includes("source")){
-            let target = element.slice(element.lastIndexOf('target="')+8, element.indexOf('"',element.lastIndexOf('target="')+10))
-            let source = conceptIDs.indexOf(element.slice(element.lastIndexOf('source="')+8, element.indexOf('"',element.lastIndexOf('source="')+10)))
-            
-            relation_labels[number_of_relations++]= element.slice(element.lastIndexOf('value="')+7, element.indexOf('"',element.lastIndexOf('value="')+8));
+            let target = conceptIDs.indexOf(element.slice(element.lastIndexOf('target="')+8, element.indexOf('"',element.lastIndexOf('target="')+10)));
+            let source = conceptIDs.indexOf(element.slice(element.lastIndexOf('source="')+8, element.indexOf('"',element.lastIndexOf('source="')+10)));
+            if(target>-1&&source>-1){
+                relation_labels[number_of_relations++]= element.slice(element.lastIndexOf('value="')+7, element.indexOf('"',element.lastIndexOf('value="')+8));
 
-            triple[numtriples++][0] = relationIDS.indexOf(source);
-            triple[numtriples][1] = relation_labels[number_of_relations];
-            triple[numtriples][2] = relationIDS.indexOf(target);
+                triple[numtriples++][0] = source;
+                triple[numtriples][1] = number_of_relations;
+                triple[numtriples][2] = target;
+            }
+            else{
+                data.push(element)
+
+            }
+
         }
         else{
-            conceptIDs.push(element.slice(element.lastIndexOf('id=')+3, element.indexOf('"',element.lastIndexOf('id=')+4)));
-            concepts[numconcepts++] = element.slice(element.lastIndexOf('value="')+6, element.indexOf('"',element.lastIndexOf('value="')+8));
+            id = element.slice(element.lastIndexOf('id=')+4, element.indexOf('"',element.lastIndexOf('id=')+5));
+            conceptIDs.push(id);
+            value =  element.slice(element.lastIndexOf('value="')+7, element.indexOf('"',element.lastIndexOf('value="')+8));
+            concepts[numconcepts++] = value
         }
     });
 }
