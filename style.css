@@ -3,16 +3,51 @@
     padding: 0;
 }
 
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+  -webkit-app-region: drag;
+
+}
+
+.topnav button {
+  -webkit-app-region: no-drag;
+}
+
+@media (prefers-color-scheme: dark) {
+  body { background: #333; color: white; }
+}
+
+.buttonminimise{
+  background-color: #333; 
+  color:white;
+      border: none;
+      float: right;
+      font-size: 14px;
+      text-align: center;
+      padding: 8px 16px;
+      text-decoration: none;
+}
+.buttonminimise:hover{
+      background-color: #707070; /* Green */ 
+    
+}
+  
 .buttonExit {
-    background-color: #f44336; /* Green */ 
+    background-color: #333; 
+color:white;
     border: none;
     float: right;
-    font-size: 25px;
-    height:50px;
-    width:50px
-   
-
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 16px;
+    text-decoration: none;
   }
+  .buttonExit:hover{
+    background-color: #f44336; /* Green */ 
+  
+  }
+
 
 .center{
   margin: auto;
@@ -52,19 +87,7 @@
     border-radius: 8px;
   }
   
-  button::after {
-    content: "";
-    display: block;
-    height: 5px;
-    width: 0;
-    background-color: #fff;
-    transition: 0.1s width linear;
-    margin: 0 auto;
-  }
-    
-  button:hover::after {
-    width: 100%;
-  }
+
   
   #vertical-buttons {
     height: 100vh;
