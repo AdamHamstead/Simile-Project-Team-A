@@ -35,7 +35,7 @@
   
 .buttonExit {
     background-color: #333; 
-color:white;
+    color:white;
     border: none;
     float: right;
     font-size: 12px;
@@ -50,15 +50,16 @@ color:white;
 
 
 .center{
-  margin: auto;
   width: 50%;
   padding: 10px;
+  
   }
 
   .flex
   {
     display: flex;
-    margin: auto;
+    padding: 10px 10px 20px 10px;
+    width: 100%;
   }
 
   .flex-2
@@ -67,6 +68,13 @@ color:white;
     height: 88vh;
     width:100%;
     margin: auto;
+  }
+
+  .left-align
+  {
+    float: left;
+    padding-right: 10px;
+    margin-right: 25%;
   }
 
   body {
