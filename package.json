@@ -4,14 +4,25 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@electron-forge/cli": "^7.3.1",
+    "@electron-forge/maker-deb": "^7.3.1",
+    "@electron-forge/maker-rpm": "^7.3.1",
+    "@electron-forge/maker-squirrel": "^7.3.1",
+    "@electron-forge/maker-zip": "^7.3.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.3.1",
     "electron": "^29.1.4"
   },
   "dependencies": {
-    "@zklogic/draw.io": "^15.7.2-rc1"
+    "@electron-forge/plugin-fuses": "^7.3.1",
+    "@zklogic/draw.io": "^15.7.2-rc1",
+    "electron-squirrel-startup": "^1.0.0"
   }
 }
