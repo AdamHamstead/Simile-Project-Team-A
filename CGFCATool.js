@@ -31,7 +31,8 @@ var cpathsizes = [10000];
     var setnumOutputs = setnumOutputs;
     var number_of_relations = 0;
     var setnumber_of_relations = setnumber_of_relations;
-    //GLOABAL VARIABLES
+    var referents = [];
+    //GLOBAL VARIABLES
 
     const fs = require('fs');
 
@@ -120,8 +121,11 @@ function myFunction(){
             else if (fname.substring(fname.length-3, fname.length) == 'xml'){
                 XMLParserEntry();
             }
+            //else if (fname.substring(fname.length-3, fname.length) == 'gif'){
+            //    input_cgif_file();
+            //}
             else{
-                console.log("File is not a csv or xml file")
+                console.log("File is not a csv, xml, or cgif file")
                 correctFileType = false;
             }
         } else{
@@ -271,6 +275,234 @@ function input_csv_file() {
 }
 
 
+function input_cgif_file() {
+    
+    try{
+        const fileContent = fs.readFileSync(selectedFile.path, 'utf8');
+        const lines = fileContent.split(/[\r\n]+/);
+
+        let number_of_relations = 0;
+        const relation_labels = [];
+        const relation_referent_lists = [];
+
+
+        let line = lines[0]; // first line split with square brackets
+        let type_and_referent;
+
+        // get CG Concept names & labels //
+        for (var i = 0; i < line.length; i++) {                                         //i => length
+            if (line[i] === "[") {
+                let start = i;                                                          //start = "["
+                for (var j = start; j < line.length; j++) {                             //j=start => length
+                    if (line[j] === "]") {                                              //when j = "]"
+                        type_and_referent = line.substring(start + 1, j - start - 1);   //from start => end
+                        extractCGconceptTypeLabelandReferent(type_and_referent);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Extract relation labels and their lists of concept referents //
+        line = lines[1];
+        for (var i = start; i < line.length; i++) {
+            if (line[i] === "(") {
+                let start = i;                                                          //start is "("
+                for (var j = start + 1; j < line.length; j++) {                         //find " "
+                    if (line[start] === "(" && line[j] === " ") {
+                        relation_labels.push(line.substring(start + 1, j - 1));         //between "(" and " " is label
+                        start = i;
+                    }
+                    else if (line[j] === " ") {
+                        relation_referent_lists.push(line.substring(start + 1, j - 1)); //between all " " or before ")" is list
+                        number_of_relations++;
+                        start = i;
+                    }
+                    if (line[j] === ")") { break; }
+                }
+            }
+        }
+
+        // Find co-referent relations (remove redundant copies) //
+        for (let rel = 0; rel < number_of_relations; rel++) {
+            let co_ref_labels = [];
+            let ref_list = relation_referent_lists[rel];
+
+            for (let rel2 = rel + 1; rel2 < number_of_relations; rel2++) {
+                if (ref_list === relation_referent_lists[rel2]) {
+                    co_ref_labels.push(relation_labels[rel2]);
+                    for (let rel3 = rel2; rel3 < number_of_relations - 1; rel3++) {
+                        relation_labels.splice(rel2, 1);
+                        relation_referent_lists.splice(rel2, 1);
+                    }
+                    number_of_relations--;
+                    rel2--;
+                }
+            }
+
+            // Concatenate distinct co-referent relation labels //
+            co_ref_labels.push(relation_labels[rel]);
+            relation_labels[rel] = "";
+
+            for (let coref = 0; coref < co_ref_labels.length; coref++) {
+                //if new relation label:
+                let i;
+                for (i = 0; i < coref; i++) {
+                    if (co_ref_labels[coref] === co_ref_labels[i]) break;
+                }
+                if (i === coref) {
+                    if (coref === 0) {
+                        relation_labels[rel] = co_ref_labels[coref];
+                    }
+                    else {
+                        relation_labels[rel] += ';' + co_ref_labels[coref];
+                    }
+                }
+            }
+
+            makeTriples(rel, relation_referent_lists[rel]);
+        }
+    }
+    catch (err) {
+        console.error('Error reading CGIF file:', err);
+        return;
+    }
+}
+function makeTriples(rel, ref_list) {
+    let i = 0; //index for ref_list (pointer to each char in the string)
+
+    let referent = ""; //reset CG Concept referent
+    let numSourceConsInRelation = 0;
+    const SourceConceptIndex = []; // lookup indexes for source concepts
+
+    while (i < ref_list.length) {
+        if (ref_list[i] !== " ") {
+            referent += ref_list[i];
+        } else { //a space indicates end of a referent, so find the corresponding cg source concept
+            let j = 0;
+            while (j < numconcepts) {
+                if (referents[j] === referent) {
+                    let k;
+                    //check for a repeated source concept
+                    for (k = 0; k < numSourceConsInRelation; k++) {
+                        if (SourceConceptIndex[k] === j) break;
+                    }
+                    if (k === numSourceConsInRelation) {
+                        SourceConceptIndex[numSourceConsInRelation++] = j;
+                        break;
+                    }
+                }
+                j++;
+            }
+            referent = ""; //reset CG Concept referent
+        }
+        i++;
+    }
+
+    let TargetConceptIndex;
+    let j = 0;
+    while (j < numconcepts) {
+        if (referents[j] === referent) {
+            TargetConceptIndex = j;
+            break;
+        }
+        j++;
+    }
+
+    for (let i = 0; i < numSourceConsInRelation; i++) {
+        triple[numtriples][SOURCE] = SourceConceptIndex[i];
+        triple[numtriples][RELATION] = rel;
+        triple[numtriples][TARGET] = TargetConceptIndex;
+        numtriples++;
+    }
+}
+function extractCGconceptTypeLabelandReferent(type_and_referent){
+    const startofreferent = type_and_referent.indexOf(":", 0);
+    const typelabel = type_and_referent.substring(0, startofreferent);
+    let referent = type_and_referent.substring(startofreferent + 2);
+
+    // if the referent is a generic referent //
+    if (referent[0] === "*" || referent[0] === "?") {
+        referent[0] = referent[0] === "*" ? "?" : referent[0]; //referent[0] = '?'
+        const pos = searchForReferent(referent); //search for co-referent
+        if (pos === numconcepts) { //if no co-referent, then add new concept
+            referents[numconcepts] = referent;
+            concepts[numconcepts] = typelabel;
+            numconcepts++;
+        } 
+        else {  //if there is a co-referent, concatenate concept type labels if they are different
+                    //unpick coreferent type labels from current possibly concatenated type labels
+            let numcorefs = 0;
+            let corefs = new Array(20).fill(""); //max 20 differently named corefs!
+            let con = concepts[pos]; //get the concept type labels string
+            let p;
+            for (p = 0; p < con.length; p++) {
+                if (con[p] !== ";") {
+                    corefs[numcorefs] += con[p]; //append characters to corefs[numcorefs]
+                } 
+                else {
+                    numcorefs++;
+                }
+            }
+            numcorefs++;
+            for (p = 0; p < numcorefs; p++) {
+                if (typelabel === corefs[p]) break; //check if typelabel is equal to any corefs
+            }
+            if (p === numcorefs) { //if typelabel is not found among corefs
+                concepts[pos] = typelabel + ";" + con; //concatenate typelabel with existing concept type labels
+            }
+        }
+    } 
+    // if there is an individual referent //
+    else {
+        if (referent[0] !== "?") {
+            const pos = searchForReferent(referent); //search for co-referent
+            if (pos === numconcepts) { //if no co-referent, then add new concept
+                concepts[numconcepts] = type_and_referent;
+                referents[numconcepts] = referent;
+                numconcepts++;
+            } 
+            else { //if there is a co-referent, concatenate concept type labels if they are different
+                //unpick coreferent type labels from current possibly concatenated type labels
+                let numcorefs = 0;
+                let corefs = new Array(20).fill(""); //initialize array with empty strings
+                let con = concepts[pos]; //get the concept type labels string
+                let p;
+            
+                //extract coreferent type labels
+                for (p = 0; p < con.length; p++) {
+                    if (con[p] !== ";" && con[p] !== ":") {
+                        corefs[numcorefs] += con[p]; //append characters to the corefs array
+                    } 
+                    else if (con[p] === ":") {
+                        numcorefs++;
+                        break;
+                    } 
+                    else {
+                        numcorefs++;
+                    }
+                }
+            
+                //check if typelabel is found among corefs
+                for (p = 0; p < numcorefs; p++) {
+                    if (typelabel === corefs[p]) break; //check if typelabel is equal to any corefs
+                }
+            
+                if (p === numcorefs) { //if typelabel is not found among corefs
+                    concepts[pos] = typelabel + ";" + con; //concatenate typelabel with existing concept type labels
+                }
+            }
+        }
+    }
+}
+let searchForReferent = (referent) => {
+    let pos;
+    for (pos = 0; pos < numconcepts; pos++) {
+        if (referent === referents[pos]) break;
+    }
+    return pos;
+}
+
 
 function find_concept(concept){
     var pos = -1;
@@ -281,9 +513,9 @@ function find_concept(concept){
         }
     }
     return (pos);
-  }
+}
   
-  function find_relation(relation){
+function find_relation(relation){
     var pos = -1;
     for (var i = 0; i < number_of_relations; i++) {
         if (relation == relation_labels[i]) {
@@ -292,9 +524,9 @@ function find_concept(concept){
         }
     }
     return (pos);
-  }
+}
   
-   function reportInputAndOuputConcepts(){
+function reportInputAndOuputConcepts(){
     for (var i = 0; i < numconcepts; i++) {
       var j = 0;
       for (j = 0; j < numtriples; j++) {
@@ -342,9 +574,9 @@ function find_concept(concept){
       }
   }
   
-  }
+}
   
-   function triples_to_binaries(){
+function triples_to_binaries(){
     var path = Array.from(Array(100000), function () { return new Array(2).fill(0); });
     //let path:number[100000][]; //to record each transitive path through triples
     var pathSize = 0;
@@ -364,9 +596,9 @@ function find_concept(concept){
         var times = repeats[i][TIMES] + 1;
         reporttxt += ("\n\n " + times + " direct pathways from \"" + concepts[source] + " - " + relation_labels[relation] + " - " + concepts[target] + "\" to \"" + concepts[output] + "\"");
     }
-  }
+}
   
-   function add_binary(attribute, source, relation, target, path, pathSize){
+function add_binary(attribute, source, relation, target, path, pathSize){
     //add source and relation to current pathway
     path[pathSize][0] = source;
     path[pathSize][1] = relation;
@@ -412,8 +644,8 @@ function find_concept(concept){
         }
     
   
-  }
-  function target_already_in_pathway(target, path, pathSize) {
+}
+function target_already_in_pathway(target, path, pathSize) {
     if (path === void 0) { path = Array.from(Array(), function () { return new Array(2).fill(0); }); }
     var count = 0;
     for (var p = 0; p < pathSize; p++) {
@@ -422,24 +654,24 @@ function find_concept(concept){
         }
     }
     return count;
-  }
-  function is_output(target) {
+}
+function is_output(target) {
     for (var i = 0; i < numOutputs; i++) {
         if (target == output_concepts[i]) {
             return true;
         }
     }
     return false;
-  }
-  function is_input(attribute) {
+}
+function is_input(attribute) {
     for (var i = 0; i < numInputs; i++) {
         if (triple[attribute][SOURCE] == input_concepts[i]) {
             return true;
         }
     }
     return false;
-  }
-  function add_to_repeats(target, attribute) {
+}
+function add_to_repeats(target, attribute) {
     var i = 0;
     for (i = 0; i < numReps; i++) {
         if (attribute == repeats[i][ATTRIBUTE] && target == repeats[i][OBJECT]) {
@@ -453,8 +685,8 @@ function find_concept(concept){
         repeats[numReps][TIMES] = 1;
         numReps++;
     }
-  }
-  function repeat_is_not_in_a_cycle(target, source) {
+}
+function repeat_is_not_in_a_cycle(target, source) {
     for (var p = 0; p < numcpaths; p++) {
         for (var i = 0; i < cpathsizes[p]; i++) {
             if (target == cyclePaths[p][i]) {
@@ -467,8 +699,8 @@ function find_concept(concept){
         }
     }
     return true;
-  }
-  function is_new_cycle(path, pathsize) {
+}
+function is_new_cycle(path, pathsize) {
     if (path === void 0) { path = Array.from(Array(), function () { return new Array(2).fill(0); }); }
     for (var p = 0; p < numcpaths; p++) {
         if (pathsize == cpathsizes[p]) {
@@ -490,9 +722,9 @@ function find_concept(concept){
         }
     }
     return true;
-  }
+}
   
-  function output_cxt_file() {
+function output_cxt_file() {
     ctxreport += ("B\n\n");
     ctxreport += (numconcepts + "\n");
     ctxreport += (numtriples + "\n\n");
@@ -514,7 +746,7 @@ function find_concept(concept){
           }
           ctxreport += ("\n");
         }
-  }
+}
 // XMLParserEntry(); dont need this entry - called in main
 function XMLParserEntry(){
     //source of XML file - will be  dynamic later
