@@ -27,6 +27,7 @@
   color:white;
       border: none;
       float: right;
+      
       font-size: 14px;
       text-align: center;
       padding: 8px 16px;
@@ -52,11 +53,10 @@
   
   }
 
+  .center{
+    margin: auto;
 
-.center{
-  margin: auto;
-
-  }
+    }
 
   .flex
   {
