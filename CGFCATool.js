@@ -764,7 +764,7 @@ function ReadXML(){
     var data;
     try
     {
-        data = fs.readFileSync(selectedFile.path).toString();
+        data = fs.readFileSync(selectedFile.path, 'utf8').toString();
     }
     catch(err)
     {
