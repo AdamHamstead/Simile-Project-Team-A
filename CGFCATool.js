@@ -84,6 +84,8 @@ function myFunction(){
      setnumOutputs = setnumOutputs;
      number_of_relations = 0;
      setnumber_of_relations = setnumber_of_relations;
+     var referents = [];
+
     
     reporttxt = "";
     ctxreport = "";
